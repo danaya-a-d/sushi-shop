@@ -1,0 +1,14 @@
+{
+  "name": "sushi-shop",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@12.11.2",
+  "scripts": {
+    "dev": "concurrently -k -n web,api -c cyan,green \"pnpm --filter web dev\" \"pnpm --filter api start:dev\"",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api start:dev"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
