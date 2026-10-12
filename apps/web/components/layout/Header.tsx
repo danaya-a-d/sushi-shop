@@ -1,0 +1,54 @@
+import Image from "next/image";
+import Link from "next/link";
+import { Container } from "@/components/layout/Container";
+import { MaskIcon } from "@/components/ui/MaskIcon";
+import { CALLBACK_PHONE } from "@/data/site";
+import { Logo } from "./Logo";
+import { MobileMenu } from "./MobileMenu";
+import { NavLinks } from "./NavLinks";
+
+export function Header() {
+  return (
+    <header className="relative z-30 bg-lime lg:bg-transparent">
+      <Container className="grid h-[72px] grid-cols-[auto_1fr_auto] items-center md:h-[115px] md:grid-cols-[1fr_auto_1fr]">
+        <MobileMenu />
+
+        <Logo className="justify-self-center lg:justify-self-start" />
+
+        <nav aria-label="Главное меню" className="hidden lg:block">
+          <NavLinks
+            className="flex items-center gap-[67px]"
+            linkClassName="text-2xl"
+          />
+        </nav>
+
+        {/* Видимые контуры телефона и корзины стоят на одной нижней линии (по макету) */}
+        <div className="mb-6 flex items-end gap-[15px] self-end justify-self-end md:mb-11 md:gap-5 lg:mb-0 lg:items-center lg:gap-[25px] lg:self-center">
+          <a
+            href={`tel:${CALLBACK_PHONE}`}
+            aria-label="Перезвонить"
+            className="relative block transition-opacity after:absolute after:-inset-x-[7px] after:-inset-y-2.5 after:content-[''] hover:opacity-70 focus-visible:opacity-70"
+          >
+            <Image
+              src="/icons/callback.svg"
+              alt=""
+              width={34}
+              height={34}
+              className="block size-6 md:size-[30px] lg:size-[34px]"
+            />
+          </a>
+          <Link
+            href="/cart"
+            aria-label="Корзина"
+            className="relative block text-ink transition-colors after:absolute after:-inset-x-[7px] after:-inset-y-2.5 after:content-[''] hover:text-primary focus-visible:text-primary"
+          >
+            <MaskIcon
+              src="/icons/cart.svg"
+              className="aspect-[34/35] w-6 md:w-[30px] lg:w-[34px]"
+            />
+          </Link>
+        </div>
+      </Container>
+    </header>
+  );
+}
