@@ -14,6 +14,8 @@ export const products: readonly Product[] = [
     categories: ["rolls", "hits"],
     weight: 450,
     price: 1250,
+    // Условные значения только для демонстрации блока; реальные данные придут из API
+    nutrition: { calories: 180, protein: 6, fat: 5, carbs: 27 },
     image: { src: "/images/products/roll-01.webp", width: 2670, height: 2750 },
   },
   {
@@ -24,6 +26,7 @@ export const products: readonly Product[] = [
     categories: ["rolls", "hits"],
     weight: 450,
     price: 1250,
+    nutrition: { calories: 165, protein: 6, fat: 4, carbs: 26 },
     image: { src: "/images/products/roll-02.webp", width: 469, height: 466 },
   },
   {
@@ -34,6 +37,7 @@ export const products: readonly Product[] = [
     categories: ["rolls", "hits"],
     weight: 450,
     price: 1250,
+    nutrition: { calories: 190, protein: 7, fat: 6, carbs: 27 },
     image: { src: "/images/products/roll-03.webp", width: 416, height: 287 },
   },
   {
@@ -44,6 +48,7 @@ export const products: readonly Product[] = [
     categories: ["rolls", "hits"],
     weight: 450,
     price: 1250,
+    nutrition: { calories: 175, protein: 8, fat: 5, carbs: 25 },
     image: { src: "/images/products/roll-04.webp", width: 355, height: 322 },
   },
   {
@@ -54,6 +59,7 @@ export const products: readonly Product[] = [
     categories: ["rolls", "new"],
     weight: 450,
     price: 1250,
+    nutrition: { calories: 160, protein: 6, fat: 3, carbs: 28 },
     image: { src: "/images/products/roll-05.webp", width: 344, height: 294 },
   },
   {
@@ -64,6 +70,7 @@ export const products: readonly Product[] = [
     categories: ["rolls", "new"],
     weight: 450,
     price: 1250,
+    nutrition: { calories: 185, protein: 7, fat: 6, carbs: 26 },
     image: { src: "/images/products/roll-06.webp", width: 434, height: 424 },
   },
   {
@@ -74,6 +81,7 @@ export const products: readonly Product[] = [
     categories: ["rolls", "new"],
     weight: 450,
     price: 1250,
+    nutrition: { calories: 170, protein: 8, fat: 4, carbs: 27 },
     image: { src: "/images/products/roll-07.webp", width: 260, height: 243 },
   },
   {
@@ -84,6 +92,7 @@ export const products: readonly Product[] = [
     categories: ["rolls", "new"],
     weight: 450,
     price: 1250,
+    nutrition: { calories: 195, protein: 9, fat: 7, carbs: 25 },
     image: { src: "/images/products/roll-08.webp", width: 291, height: 287 },
   },
 ];

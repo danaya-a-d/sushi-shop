@@ -25,6 +25,21 @@ export function parseCategory(value: string | string[] | undefined): CategorySlu
   return categories.find((category) => category.slug === slug)?.slug ?? "all";
 }
 
+export function getProductBySlug(slug: string): Product | undefined {
+  return products.find((product) => product.slug === slug);
+}
+
+/** Другие товары: сначала с общими категориями, затем остальные (порядок данных сохраняется). */
+export function getRelatedProducts(product: Product, limit = 4): readonly Product[] {
+  const shared = (item: Product) =>
+    item.categories.filter((slug) => product.categories.includes(slug)).length;
+
+  return products
+    .filter((item) => item.id !== product.id)
+    .sort((a, b) => shared(b) - shared(a))
+    .slice(0, limit);
+}
+
 export function getProducts(category: CategorySlug = "all"): readonly Product[] {
   if (category === "all") return products;
   return products.filter((product) => product.categories.includes(category));

@@ -1,12 +1,14 @@
 export type NavItem = {
   label: string;
   href: string;
+  /** Другие маршруты, на которых пункт тоже считается активным */
+  alsoActiveOn?: readonly string[];
 };
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { label: "Главная", href: "/" },
   { label: "О нас", href: "/about" },
-  { label: "Меню и акции", href: "/catalog" },
+  { label: "Меню и акции", href: "/catalog", alsoActiveOn: ["/products"] },
 ];
 
 export type SocialLink = {

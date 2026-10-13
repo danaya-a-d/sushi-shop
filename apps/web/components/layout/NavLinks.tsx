@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NAV_ITEMS } from "@/data/site";
+import { NAV_ITEMS, type NavItem } from "@/data/site";
 
 type NavLinksProps = {
   className?: string;
@@ -10,8 +10,11 @@ type NavLinksProps = {
   onNavigate?: () => void;
 };
 
-function isActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+function isActive(pathname: string, item: NavItem) {
+  if (item.href === "/") return pathname === "/";
+  return [item.href, ...(item.alsoActiveOn ?? [])].some((path) =>
+    pathname.startsWith(path),
+  );
 }
 
 /** Основная навигация; активный пункт подчёркнут линией. */
@@ -25,7 +28,7 @@ export function NavLinks({
   return (
     <ul className={className}>
       {NAV_ITEMS.map((item) => {
-        const active = isActive(pathname, item.href);
+        const active = isActive(pathname, item);
         return (
           <li key={item.href}>
             <Link

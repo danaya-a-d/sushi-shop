@@ -22,6 +22,17 @@ export const ABOUT_CIRCLES: readonly Circle[] = [
   { color: "bg-accent", size: 18.8, left: 81.1, top: 81.2 },
 ];
 
+/**
+ * Асимметричные круги плашки товара (плашка занимает left 4–96%, top 0–92%
+ * обёртки). Рисуются поверх плашки и лишь слегка заходят на её край, фото не
+ * перекрывают. Все круги остаются внутри обёртки.
+ */
+export const PRODUCT_CIRCLES: readonly Circle[] = [
+  { color: "bg-ink", size: 9, left: 83, top: 5 },
+  { color: "bg-primary", size: 14, left: 0, top: 54 },
+  { color: "bg-accent", size: 19, left: 79, top: 76 },
+];
+
 type DecorCirclesProps = {
   circles: readonly Circle[];
 };
