@@ -1,0 +1,1391 @@
+{
+  "format": "sushi-assets/1",
+  "summary": {
+    "inputArchives": 5,
+    "uniqueImages": 27,
+    "socialIcons": 3,
+    "originalSvgExports": 4,
+    "additionalSvgIcons": 4
+  },
+  "pages": {
+    "Корзина": {
+      "images": 11,
+      "vectors": 0,
+      "errors": []
+    },
+    "Заказ": {
+      "images": 6,
+      "vectors": 1,
+      "errors": []
+    },
+    "Меню": {
+      "images": 13,
+      "vectors": 1,
+      "errors": []
+    },
+    "Главная": {
+      "images": 16,
+      "vectors": 1,
+      "errors": []
+    },
+    "О нас": {
+      "images": 12,
+      "vectors": 1,
+      "errors": []
+    }
+  },
+  "images": [
+    {
+      "file": "/images/about/cooking.webp",
+      "imageHash": "b5d4ada5880714b3fa323badfae1b00ae1976430",
+      "originalFile": "assets/raw/image-b5d4ada5880714b3fa.png",
+      "originalBytes": 679987,
+      "optimizedBytes": 61392,
+      "dimensions": {
+        "width": 750,
+        "height": 750
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "298:1114",
+          "nodeName": "Rectangle 9",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / О нас / Изображение / Rectangle 9 (298:1114)",
+          "property": "fills",
+          "width": 578,
+          "height": 550,
+          "scaleMode": "CROP",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/gallery-01.webp",
+      "imageHash": "ad6654f9f5a7b3d090b8b79c4722d4a9d34e0670",
+      "originalFile": "assets/raw/image-ad6654f9f5a7b3d090.png",
+      "originalBytes": 1223531,
+      "optimizedBytes": 96604,
+      "dimensions": {
+        "width": 1125,
+        "height": 750
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "298:1106",
+          "nodeName": "Rectangle 9",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Галерея / Фотографии / Rectangle 9 (298:1106)",
+          "property": "fills",
+          "width": 768,
+          "height": 530,
+          "scaleMode": "FILL",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/gallery-02.webp",
+      "imageHash": "08125f12bc9360c0fb64ac409512fb8f1e20665f",
+      "originalFile": "assets/raw/image-08125f12bc9360c0fb.png",
+      "originalBytes": 704931,
+      "optimizedBytes": 59118,
+      "dimensions": {
+        "width": 1125,
+        "height": 750
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "298:1107",
+          "nodeName": "Rectangle 10",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Галерея / Фотографии / Rectangle 10 (298:1107)",
+          "property": "fills",
+          "width": 486,
+          "height": 322,
+          "scaleMode": "CROP",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/gallery-03.webp",
+      "imageHash": "6bad772beb041bda7b1446e13385e83ed190ae42",
+      "originalFile": "assets/raw/image-6bad772beb041bda7b.jpg",
+      "originalBytes": 44274,
+      "optimizedBytes": 49948,
+      "dimensions": {
+        "width": 612,
+        "height": 459
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "298:1108",
+          "nodeName": "Rectangle 12",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Галерея / Фотографии / Rectangle 12 (298:1108)",
+          "property": "fills",
+          "width": 372,
+          "height": 376,
+          "scaleMode": "FILL",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/gallery-04.webp",
+      "imageHash": "1b989df2a511881bd25e8282ff4574da4643b991",
+      "originalFile": "assets/raw/image-1b989df2a511881bd2.png",
+      "originalBytes": 1685469,
+      "optimizedBytes": 109918,
+      "dimensions": {
+        "width": 1600,
+        "height": 1067
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "298:1109",
+          "nodeName": "Rectangle 13",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Галерея / Фотографии / Rectangle 13 (298:1109)",
+          "property": "fills",
+          "width": 372,
+          "height": 376,
+          "scaleMode": "CROP",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/gallery-05.webp",
+      "imageHash": "9af2d0a9bfa4955e6b523c60aff2844bd396591e",
+      "originalFile": "assets/raw/image-9af2d0a9bfa4955e6b.jpg",
+      "originalBytes": 311853,
+      "optimizedBytes": 471908,
+      "dimensions": {
+        "width": 1600,
+        "height": 2133
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "298:1110",
+          "nodeName": "Rectangle 11",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Галерея / Фотографии / Rectangle 11 (298:1110)",
+          "property": "fills",
+          "width": 486,
+          "height": 584,
+          "scaleMode": "CROP",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/philosophy.webp",
+      "imageHash": "85a2041066f1be50556169163dd7831a94333876",
+      "originalFile": "assets/raw/image-85a2041066f1be5055.png",
+      "originalBytes": 306482,
+      "optimizedBytes": 43794,
+      "dimensions": {
+        "width": 612,
+        "height": 406
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "298:1136",
+          "nodeName": "Rectangle 9",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / О нас / Изображение / Rectangle 9 (298:1136)",
+          "property": "fills",
+          "width": 578,
+          "height": 550,
+          "scaleMode": "FILL",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/staff-01.webp",
+      "imageHash": "e55f1910c25ef0c07de8732d1a5fd7a37521803f",
+      "originalFile": "assets/raw/image-e55f1910c25ef0c07d.jpg",
+      "originalBytes": 43120,
+      "optimizedBytes": 42090,
+      "dimensions": {
+        "width": 612,
+        "height": 408
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "I298:1126;274:914",
+          "nodeName": "istockphoto-1144614890-612x612 1",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Сотрудники / Сотрудники / Сотрудник / istockphoto-1144614890-612x612 1 (I298:1126;274:914)",
+          "property": "fills",
+          "width": 250,
+          "height": 249,
+          "scaleMode": "CROP",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": true,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/staff-02.webp",
+      "imageHash": "4c596e1202a7829897f80f8c7fdd5d13d55b3266",
+      "originalFile": "assets/raw/image-4c596e1202a7829897.jpg",
+      "originalBytes": 34808,
+      "optimizedBytes": 35188,
+      "dimensions": {
+        "width": 612,
+        "height": 459
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "I298:1127;274:914",
+          "nodeName": "istockphoto-1144614890-612x612 1",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Сотрудники / Сотрудники / Сотрудник / istockphoto-1144614890-612x612 1 (I298:1127;274:914)",
+          "property": "fills",
+          "width": 250,
+          "height": 249,
+          "scaleMode": "CROP",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": true,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/staff-03.webp",
+      "imageHash": "b7269c52bc6aabf93f55bfb8409b83b8cb55de10",
+      "originalFile": "assets/raw/image-b7269c52bc6aabf93f.jpg",
+      "originalBytes": 44586,
+      "optimizedBytes": 45160,
+      "dimensions": {
+        "width": 612,
+        "height": 408
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "I298:1128;274:914",
+          "nodeName": "istockphoto-1144614890-612x612 1",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Сотрудники / Сотрудники / Сотрудник / istockphoto-1144614890-612x612 1 (I298:1128;274:914)",
+          "property": "fills",
+          "width": 250,
+          "height": 249,
+          "scaleMode": "CROP",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": true,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/about/staff-04.webp",
+      "imageHash": "8bea1ddaa1646d1ed7c7d389f9f90304ae804343",
+      "originalFile": "assets/raw/image-8bea1ddaa1646d1ed7.jpg",
+      "originalBytes": 35751,
+      "optimizedBytes": 36402,
+      "dimensions": {
+        "width": 408,
+        "height": 612
+      },
+      "sourcePages": [
+        "О нас"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "I298:1129;274:914",
+          "nodeName": "istockphoto-1144614890-612x612 1",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Сотрудники / Сотрудники / Сотрудник / istockphoto-1144614890-612x612 1 (I298:1129;274:914)",
+          "property": "fills",
+          "width": 250,
+          "height": 249,
+          "scaleMode": "CROP",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": true,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/hero/about.webp",
+      "imageHash": "270b8307ac56bd6e350cbb7c7270f9641e85ea11",
+      "originalFile": "assets/raw/image-270b8307ac56bd6e35.jpg",
+      "originalBytes": 7846176,
+      "optimizedBytes": 1896968,
+      "dimensions": {
+        "width": 2732,
+        "height": 4096
+      },
+      "sourcePages": [
+        "Главная",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 4,
+      "usages": [
+        {
+          "nodeId": "I232:606;79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Frame 8 / Frame 6 / Frame 4 / pexels-photo-11230993 1 (I232:606;79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "CROP",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I223:485;79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Акции / Frame 6 / Frame 4 / pexels-photo-11230993 1 (I223:485;79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "CROP",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "63:105",
+          "nodeName": "Rectangle 9",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / О нас / Изображение / Rectangle 9 (63:105)",
+          "property": "fills",
+          "width": 578,
+          "height": 551,
+          "scaleMode": "CROP",
+          "sourcePage": "Главная"
+        },
+        {
+          "nodeId": "I63:127;79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Акции / Frame 8 / Frame 6 / Frame 4 / pexels-photo-11230993 1 (I63:127;79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "CROP",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/hero/hero.webp",
+      "imageHash": "f552aca2fe3beabce216e6958daf350b37e1a42c",
+      "originalFile": "assets/raw/image-f552aca2fe3beabce2.png",
+      "originalBytes": 1445065,
+      "optimizedBytes": 122076,
+      "dimensions": {
+        "width": 1600,
+        "height": 2400
+      },
+      "sourcePages": [
+        "Главная"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "72:216",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Первый экран / Первый экран / Изображение / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (72:216)",
+          "property": "fills",
+          "width": 613,
+          "height": 631,
+          "scaleMode": "CROP",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/products/roll-01.webp",
+      "imageHash": "1819340530b5df4e79fa2f60562f3c74348cd966",
+      "originalFile": "assets/raw/image-1819340530b5df4e79.png",
+      "originalBytes": 10369448,
+      "optimizedBytes": 1524526,
+      "dimensions": {
+        "width": 2670,
+        "height": 2750
+      },
+      "sourcePages": [
+        "Главная",
+        "Заказ",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 6,
+      "usages": [
+        {
+          "nodeId": "I403:3006;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Меню / Frame 15 / Frame 15 / Frame 1 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:3006;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "235:880",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Контейнер / Корзина / Frame 5 / Товар / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (235:880)",
+          "property": "fills",
+          "width": 145,
+          "height": 123,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "402:1880",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Заказ / Корзина / Frame 5 / Товар / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (402:1880)",
+          "property": "fills",
+          "width": 143,
+          "height": 109,
+          "scaleMode": "FIT",
+          "sourcePage": "Заказ"
+        },
+        {
+          "nodeId": "I403:2840;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 1 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2840;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I403:2923;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 15 / Frame 1 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2923;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 1 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/products/roll-02.webp",
+      "imageHash": "4b570aa4ec51ddbef376db42461f390b07f0f985",
+      "originalFile": "assets/raw/image-4b570aa4ec51ddbef3.png",
+      "originalBytes": 313731,
+      "optimizedBytes": 51530,
+      "dimensions": {
+        "width": 469,
+        "height": 466
+      },
+      "sourcePages": [
+        "Главная",
+        "Заказ",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 6,
+      "usages": [
+        {
+          "nodeId": "I403:3007;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Меню / Frame 15 / Frame 15 / Frame 1 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:3007;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I236:907;235:880",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Контейнер / Корзина / Frame 5 / Товар / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I236:907;235:880)",
+          "property": "fills",
+          "width": 145,
+          "height": 123,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I258:1385;402:1880",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Заказ / Корзина / Frame 34 / Товар / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I258:1385;402:1880)",
+          "property": "fills",
+          "width": 143,
+          "height": 109,
+          "scaleMode": "FIT",
+          "sourcePage": "Заказ"
+        },
+        {
+          "nodeId": "I403:2841;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 1 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2841;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I403:2924;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 15 / Frame 1 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2924;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I397:2324;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 1 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I397:2324;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/products/roll-03.webp",
+      "imageHash": "f2c8ee95a774d6ce1b437f03cc3c39824688bfa5",
+      "originalFile": "assets/raw/image-f2c8ee95a774d6ce1b.png",
+      "originalBytes": 313731,
+      "optimizedBytes": 43850,
+      "dimensions": {
+        "width": 416,
+        "height": 287
+      },
+      "sourcePages": [
+        "Главная",
+        "Заказ",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 5,
+      "usages": [
+        {
+          "nodeId": "I403:3008;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Меню / Frame 15 / Frame 15 / Frame 1 / Frame 13 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:3008;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I259:1405;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Заказ / Frame 1 / Frame 12 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I259:1405;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Заказ"
+        },
+        {
+          "nodeId": "I403:2842;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 1 / Frame 13 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2842;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I403:2925;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 15 / Frame 1 / Frame 13 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2925;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I63:113;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 1 / Frame 13 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I63:113;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/products/roll-04.webp",
+      "imageHash": "c74a0d27b12f824a409d31c23e584dfde884e992",
+      "originalFile": "assets/raw/image-c74a0d27b12f824a40.png",
+      "originalBytes": 184950,
+      "optimizedBytes": 32850,
+      "dimensions": {
+        "width": 355,
+        "height": 322
+      },
+      "sourcePages": [
+        "Главная",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 4,
+      "usages": [
+        {
+          "nodeId": "I403:3009;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Меню / Frame 15 / Frame 15 / Frame 1 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:3009;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I403:2843;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 1 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2843;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I403:2926;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 15 / Frame 1 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2926;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I63:114;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 1 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I63:114;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/products/roll-05.webp",
+      "imageHash": "bc3e6c3025d95090f95f9cb632df627df4d3f034",
+      "originalFile": "assets/raw/image-bc3e6c3025d95090f9.png",
+      "originalBytes": 207793,
+      "optimizedBytes": 42428,
+      "dimensions": {
+        "width": 344,
+        "height": 294
+      },
+      "sourcePages": [
+        "Главная",
+        "Заказ",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 5,
+      "usages": [
+        {
+          "nodeId": "I403:3011;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Меню / Frame 15 / Frame 15 / Frame 2 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:3011;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I259:1404;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Заказ / Frame 1 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I259:1404;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Заказ"
+        },
+        {
+          "nodeId": "I403:2845;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 2 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2845;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I403:2928;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 15 / Frame 2 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2928;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I63:116;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 2 / Frame 14 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I63:116;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/products/roll-06.webp",
+      "imageHash": "efed412472caadb0cc03dea1fdb4d893f13adbbe",
+      "originalFile": "assets/raw/image-efed412472caadb0cc.png",
+      "originalBytes": 313731,
+      "optimizedBytes": 40666,
+      "dimensions": {
+        "width": 434,
+        "height": 424
+      },
+      "sourcePages": [
+        "Главная",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 5,
+      "usages": [
+        {
+          "nodeId": "I403:3012;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Меню / Frame 15 / Frame 15 / Frame 2 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:3012;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I403:2846;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 2 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2846;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I403:2929;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 15 / Frame 2 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2929;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I397:2314;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 2 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I397:2314;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        },
+        {
+          "nodeId": "I397:2314;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 2 / Frame 15 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I397:2314;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/products/roll-07.webp",
+      "imageHash": "6fb24778f9323020fb37ad40d66f10bd62dbc7b2",
+      "originalFile": "assets/raw/image-6fb24778f9323020fb.png",
+      "originalBytes": 313731,
+      "optimizedBytes": 27172,
+      "dimensions": {
+        "width": 260,
+        "height": 243
+      },
+      "sourcePages": [
+        "Главная",
+        "Заказ",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 5,
+      "usages": [
+        {
+          "nodeId": "I403:3013;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Меню / Frame 15 / Frame 15 / Frame 2 / Frame 12 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:3013;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I259:1406;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Заказ / Frame 1 / Frame 13 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I259:1406;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Заказ"
+        },
+        {
+          "nodeId": "I403:2847;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 2 / Frame 12 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2847;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I403:2930;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 15 / Frame 2 / Frame 12 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2930;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I63:117;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 2 / Frame 12 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I63:117;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/products/roll-08.webp",
+      "imageHash": "bb6a15280636ae7c52d1177234c56cc7cb673ee4",
+      "originalFile": "assets/raw/image-bb6a15280636ae7c52.png",
+      "originalBytes": 313731,
+      "optimizedBytes": 29932,
+      "dimensions": {
+        "width": 291,
+        "height": 287
+      },
+      "sourcePages": [
+        "Главная",
+        "Заказ",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 5,
+      "usages": [
+        {
+          "nodeId": "I403:3014;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Меню / Frame 15 / Frame 15 / Frame 2 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:3014;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I259:1407;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Заказ / Frame 1 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I259:1407;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Заказ"
+        },
+        {
+          "nodeId": "I403:2848;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 2 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2848;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I403:2931;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Меню / Frame 16 / Frame 15 / Frame 2 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I403:2931;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I63:119;72:404",
+          "nodeName": "closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Меню / Frame 15 / Frame 2 / Frame 11 / Group 4 / closeup-shot-of-a-sushi-roll-on-a-black-stone-plate22 2 (I63:119;72:404)",
+          "property": "fills",
+          "width": 230,
+          "height": 170,
+          "scaleMode": "FIT",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/promo/promo-01.webp",
+      "imageHash": "c2257f7f3baf9e2a110146b27e9337def55d739c",
+      "originalFile": "assets/raw/image-c2257f7f3baf9e2a11.jpg",
+      "originalBytes": 41672,
+      "optimizedBytes": 56698,
+      "dimensions": {
+        "width": 422,
+        "height": 750
+      },
+      "sourcePages": [
+        "Главная",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 3,
+      "usages": [
+        {
+          "nodeId": "I232:604;79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Frame 8 / Frame 8 / Frame 4 / pexels-photo-11230993 1 (I232:604;79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "FILL",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I223:483;79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Акции / Frame 8 / Frame 4 / pexels-photo-11230993 1 (I223:483;79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "FILL",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Акции / Frame 8 / Frame 8 / Frame 4 / pexels-photo-11230993 1 (79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "FILL",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/promo/promo-02.webp",
+      "imageHash": "df681786a23f944e389de41b37060d58dfad1e5b",
+      "originalFile": "assets/raw/image-df681786a23f944e38.jpg",
+      "originalBytes": 6062030,
+      "optimizedBytes": 638704,
+      "dimensions": {
+        "width": 2731,
+        "height": 4096
+      },
+      "sourcePages": [
+        "Главная",
+        "Корзина",
+        "Меню"
+      ],
+      "usageCount": 3,
+      "usages": [
+        {
+          "nodeId": "I232:605;79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Корзина / Фон / Frame 8 / Frame 8 / Frame 4 / pexels-photo-11230993 1 (I232:605;79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "CROP",
+          "sourcePage": "Корзина"
+        },
+        {
+          "nodeId": "I223:484;79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Акции / Frame 8 / Frame 4 / pexels-photo-11230993 1 (I223:484;79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "CROP",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "I63:126;79:524",
+          "nodeName": "pexels-photo-11230993 1",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Акции / Frame 8 / Frame 8 / Frame 4 / pexels-photo-11230993 1 (I63:126;79:524)",
+          "property": "fills",
+          "width": 236,
+          "height": 253,
+          "scaleMode": "CROP",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/promo/promo-03.webp",
+      "imageHash": "8799de57fe7a101a255842ba93c2133807621533",
+      "originalFile": "assets/raw/image-8799de57fe7a101a25.png",
+      "originalBytes": 891575,
+      "optimizedBytes": 99440,
+      "dimensions": {
+        "width": 941,
+        "height": 718
+      },
+      "sourcePages": [
+        "Главная"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "77:505",
+          "nodeName": "image 1",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Акции / Frame 9 / Frame 8 / Frame 4 / image 1 (77:505)",
+          "property": "fills",
+          "width": 348,
+          "height": 253,
+          "scaleMode": "CROP",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/promo/promo-04.webp",
+      "imageHash": "916646fef0f98a273b59194e8b990cc17424f168",
+      "originalFile": "assets/raw/image-916646fef0f98a273b.png",
+      "originalBytes": 257390,
+      "optimizedBytes": 38586,
+      "dimensions": {
+        "width": 416,
+        "height": 328
+      },
+      "sourcePages": [
+        "Главная"
+      ],
+      "usageCount": 1,
+      "usages": [
+        {
+          "nodeId": "I63:124;77:505",
+          "nodeName": "image 1",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Акции / Frame 9 / Frame 7 / Frame 4 / image 1 (I63:124;77:505)",
+          "property": "fills",
+          "width": 348,
+          "height": 253,
+          "scaleMode": "CROP",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/restaurants/cafe.webp",
+      "imageHash": "d99f41c12f48c414d3d0f23b358382c1cddfd4d6",
+      "originalFile": "assets/raw/image-d99f41c12f48c414d3.jpg",
+      "originalBytes": 80129,
+      "optimizedBytes": 114578,
+      "dimensions": {
+        "width": 500,
+        "height": 750
+      },
+      "sourcePages": [
+        "Главная",
+        "Меню"
+      ],
+      "usageCount": 2,
+      "usages": [
+        {
+          "nodeId": "216:452",
+          "nodeName": "Rectangle 9",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Рестораны / Rectangle 9 (216:452)",
+          "property": "fills",
+          "width": 630,
+          "height": 579,
+          "scaleMode": "CROP",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "63:102",
+          "nodeName": "Rectangle 9",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Рестораны / Rectangle 9 (63:102)",
+          "property": "fills",
+          "width": 630,
+          "height": 583,
+          "scaleMode": "CROP",
+          "sourcePage": "Главная"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": false
+    },
+    {
+      "file": "/images/restaurants/map.webp",
+      "imageHash": "91c36ac2090743fd85ce97147924db96f60f1e37",
+      "originalFile": "assets/raw/image-91c36ac2090743fd85.png",
+      "originalBytes": 108473,
+      "optimizedBytes": 48884,
+      "dimensions": {
+        "width": 706,
+        "height": 513
+      },
+      "sourcePages": [
+        "Главная",
+        "Меню",
+        "О нас"
+      ],
+      "usageCount": 3,
+      "usages": [
+        {
+          "nodeId": "216:453",
+          "nodeName": "Rectangle 10",
+          "nodeType": "RECTANGLE",
+          "path": "Меню / Рестораны / Rectangle 10 (216:453)",
+          "property": "fills",
+          "width": 630,
+          "height": 579,
+          "scaleMode": "FILL",
+          "sourcePage": "Меню"
+        },
+        {
+          "nodeId": "92:369",
+          "nodeName": "Rectangle 10",
+          "nodeType": "RECTANGLE",
+          "path": "Главная / Рестораны / Rectangle 10 (92:369)",
+          "property": "fills",
+          "width": 630,
+          "height": 583,
+          "scaleMode": "FILL",
+          "sourcePage": "Главная"
+        },
+        {
+          "nodeId": "298:1255",
+          "nodeName": "Rectangle 10",
+          "nodeType": "RECTANGLE",
+          "path": "О нас / Рестораны / Rectangle 10 (298:1255)",
+          "property": "fills",
+          "width": 1296,
+          "height": 700,
+          "scaleMode": "FILL",
+          "sourcePage": "О нас"
+        }
+      ],
+      "localDevelopmentOnly": false,
+      "rightsNeedReview": true
+    }
+  ],
+  "icons": [
+    {
+      "file": "/icons/instagram.svg",
+      "source": "figma composite social group"
+    },
+    {
+      "file": "/icons/telegram.svg",
+      "source": "figma composite social group"
+    },
+    {
+      "file": "/icons/facebook.svg",
+      "source": "figma composite social group"
+    },
+    {
+      "file": "/icons/callback.svg",
+      "source": "user-supplied Figma SVG: Перезвонить.svg",
+      "sha256": "a69b0eba9fe3a1464f0b5a0b8680434df215a0663dced017e159769ecd9d9da6"
+    },
+    {
+      "file": "/icons/logo.svg",
+      "source": "user-supplied Figma SVG: Лого.svg",
+      "sha256": "fc97e798e15f70cd28cb679cc5d3afbefacf5caebd7846f93e01d89b30aab882"
+    },
+    {
+      "file": "/icons/delete.svg",
+      "source": "user-supplied Figma SVG: Удалить.svg",
+      "sha256": "af1924ed4c01dd230e82b9f09c2ab42bc11fe0ebb9796ab9d23c0de7ac51bc88"
+    },
+    {
+      "file": "/icons/cart.svg",
+      "source": "user-supplied Figma SVG: Корзина.svg",
+      "sha256": "06ec00051639c0e895c250081c97d6200fface5dc2004806eb60f2b1d2099ad5"
+    }
+  ],
+  "notes": {
+    "map": "/images/restaurants/map.webp is a temporary static Figma screenshot/reference only. Replace later with an interactive Google Maps integration when implementing location functionality. Do not treat screenshot as final public map.",
+    "mapIntegrationStatus": "planned; not part of current UI-only implementation"
+  }
+}
