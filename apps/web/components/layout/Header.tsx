@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/layout/Container";
+import { CallbackIcon } from "@/components/ui/icons";
 import { MaskIcon } from "@/components/ui/MaskIcon";
 import { CALLBACK_PHONE } from "@/data/site";
 import { Logo } from "./Logo";
@@ -27,20 +27,14 @@ export function Header() {
           <a
             href={`tel:${CALLBACK_PHONE}`}
             aria-label="Перезвонить"
-            className="relative block transition-opacity after:absolute after:-inset-x-[7px] after:-inset-y-2.5 after:content-[''] hover:opacity-70 focus-visible:opacity-70"
+            className="relative block text-ink transition-ui-fast after:absolute after:-inset-x-[7px] after:-inset-y-2.5 after:content-[''] hover:text-primary focus-visible:text-primary"
           >
-            <Image
-              src="/icons/callback.svg"
-              alt=""
-              width={34}
-              height={34}
-              className="block size-6 md:size-[30px] lg:size-[34px]"
-            />
+            <CallbackIcon className="block size-6 md:size-[30px] lg:size-[34px]" />
           </a>
           <Link
             href="/cart"
             aria-label="Корзина"
-            className="relative block text-ink transition-colors after:absolute after:-inset-x-[7px] after:-inset-y-2.5 after:content-[''] hover:text-primary focus-visible:text-primary"
+            className="relative block text-ink transition-ui-fast after:absolute after:-inset-x-[7px] after:-inset-y-2.5 after:content-[''] hover:text-primary focus-visible:text-primary"
           >
             <MaskIcon
               src="/icons/cart.svg"

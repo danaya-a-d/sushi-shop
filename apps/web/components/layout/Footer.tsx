@@ -24,7 +24,7 @@ export function Footer() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="transition-colors hover:text-primary focus-visible:text-primary"
+                  className="transition-ui hover:text-primary focus-visible:text-primary"
                 >
                   {item.label}
                 </Link>

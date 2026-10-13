@@ -27,7 +27,7 @@ export function CategoryFilter({ categories, active }: CategoryFilterProps) {
                 }
                 scroll={false}
                 aria-current={isActive ? "true" : undefined}
-                className={`flex h-11 items-center rounded-full border px-[15px] text-xl whitespace-nowrap transition-colors ${
+                className={`flex h-11 items-center rounded-full border px-[15px] text-xl whitespace-nowrap transition-ui ${
                   isActive
                     ? "border-primary bg-lavender font-medium"
                     : "border-transparent bg-lavender/70 hover:bg-lavender focus-visible:bg-lavender"

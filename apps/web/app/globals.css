@@ -22,6 +22,23 @@
 
   --shadow-promo: 0 4px 25px #a883c94d;
   --shadow-arrow: 0 2px 5px #a883c94d;
+
+  /* Анимации интерфейса: длительности и единый easing */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 250ms;
+  --ease-ui: cubic-bezier(0, 0, 0.2, 1);
+  /* Мягкий старт и остановка для подъёма и теней карточек */
+  --ease-lift: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover только для устройств с точным указателем (на touch он «залипает») */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
 }
 
 /* Заголовок с подсветкой: полоса lavender на нижней половине строки */
@@ -39,6 +56,43 @@
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* Плавная смена цвета, фона, границы и прозрачности (200 мс) */
+@utility transition-ui {
+  transition-property: color, background-color, border-color, opacity;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-ui);
+}
+
+/* Быстрый вариант для мелких элементов, например иконок (150 мс) */
+@utility transition-ui-fast {
+  transition-property: color, background-color, border-color, opacity;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-ui);
+}
+
+/* Только тень (200 мс): стрелка карусели, плитка товара */
+@utility transition-shadow-ui {
+  transition-property: box-shadow;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-ui);
+}
+
+/* Подъём и тень карточек (280 мс). Tailwind v4 двигает элементы свойством `translate`, а не `transform`, поэтому анимируем именно его */
+@utility transition-lift {
+  transition-property: translate, box-shadow;
+  transition-duration: 280ms;
+  transition-timing-function: var(--ease-lift);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transition-ui,
+  .transition-ui-fast,
+  .transition-shadow-ui,
+  .transition-lift {
+    transition-duration: 0.01ms;
   }
 }
 

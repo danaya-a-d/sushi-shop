@@ -14,7 +14,7 @@ type PromoListProps = {
 
 const listLayout = {
   grid: "lg:mx-0 lg:my-0 lg:grid lg:snap-none lg:grid-cols-6 lg:gap-x-[30px] lg:gap-y-10 lg:overflow-visible lg:p-0",
-  carousel: "lg:mx-0 lg:scroll-px-0 lg:px-0",
+  carousel: "",
 };
 
 /**
@@ -33,7 +33,7 @@ export function PromoList({
   return (
     <ul
       id={id}
-      className={`scrollbar-hidden -mx-5 -my-2 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-5 px-5 py-2 md:gap-[30px] ${listLayout[layout]}`}
+      className={`scrollbar-hidden -mx-5 -my-8 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-5 px-5 py-8 md:gap-[30px] ${listLayout[layout]}`}
     >
       {promos.map((promo, index) => {
         const wide = isGrid && index >= 3;

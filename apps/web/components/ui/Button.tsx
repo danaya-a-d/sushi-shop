@@ -5,7 +5,7 @@ type Variant = "primary" | "secondary";
 type Size = "l" | "s";
 
 const base =
-  "inline-flex items-center justify-center rounded-full font-heading whitespace-nowrap transition-colors";
+  "inline-flex items-center justify-center rounded-full font-heading whitespace-nowrap transition-ui";
 
 const variants: Record<Variant, string> = {
   primary:

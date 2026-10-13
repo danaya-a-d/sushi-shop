@@ -19,7 +19,7 @@ export function SocialLinks({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={social.label}
-            className="block text-ink transition-colors hover:text-primary focus-visible:text-primary"
+            className="block text-ink transition-ui-fast hover:text-primary focus-visible:text-primary"
           >
             <MaskIcon src={social.icon} className={iconClassName} />
           </a>

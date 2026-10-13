@@ -12,9 +12,9 @@ export function ProductCard({ product }: ProductCardProps) {
   const href = `/products/${product.slug}`;
 
   return (
-    <article className="flex h-full flex-col">
+    <article className="group flex h-full flex-col">
       <Link href={href} className="block rounded-[30px] md:rounded-[100px]">
-        <span className="grid aspect-[300/230] place-items-center rounded-[inherit] bg-lime">
+        <span className="transition-lift grid aspect-[300/230] place-items-center rounded-[inherit] bg-lime group-hover:shadow-promo group-focus-within:shadow-promo">
           <span className="relative block h-[74%] w-[77%]">
             <Image
               src={product.image.src}
@@ -29,7 +29,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
       <div className="flex flex-1 flex-col px-px md:pr-0 md:pl-3">
         <h3 className="mt-3 font-heading text-base leading-[1.3] md:text-2xl">
-          <Link href={href} className="hover:text-primary focus-visible:text-primary">
+          <Link href={href} className="transition-ui group-hover:text-primary focus-visible:text-primary">
             {product.name}
           </Link>
         </h3>

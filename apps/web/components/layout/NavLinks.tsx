@@ -32,7 +32,7 @@ export function NavLinks({
               href={item.href}
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
-              className={`border-b border-transparent transition-colors hover:text-primary focus-visible:text-primary ${
+              className={`border-b border-transparent transition-ui hover:text-primary focus-visible:text-primary ${
                 active ? "!border-ink" : ""
               } ${linkClassName}`}
             >

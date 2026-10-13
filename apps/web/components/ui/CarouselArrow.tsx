@@ -30,7 +30,7 @@ export function CarouselArrow({ targetId, className = "" }: CarouselArrowProps) 
       type="button"
       aria-label="Показать следующие акции"
       onClick={scrollNext}
-      className={`grid size-[45px] place-items-center rounded-full bg-lavender transition-colors hover:bg-primary/40 focus-visible:bg-primary/40 ${className}`}
+      className={`grid size-[45px] cursor-pointer place-items-center rounded-full bg-lavender transition-shadow-ui hover:shadow-arrow focus-visible:shadow-arrow ${className}`}
     >
       <svg
         viewBox="0 0 11.5 21.4"

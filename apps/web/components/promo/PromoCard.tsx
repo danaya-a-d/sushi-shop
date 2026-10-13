@@ -25,7 +25,7 @@ export function PromoCard({ promo, wide = false }: PromoCardProps) {
   return (
     <Link
       href={promo.href}
-      className={`flex w-full flex-col overflow-hidden rounded-[30px] transition-shadow hover:shadow-promo focus-visible:shadow-promo md:flex-row md:rounded-full ${tones[promo.tone]}`}
+      className={`flex w-full flex-col overflow-hidden rounded-[30px] transition-lift motion-safe:hover:-translate-y-[3px] hover:shadow-promo focus-visible:shadow-promo md:flex-row md:rounded-full ${tones[promo.tone]}`}
     >
       <span
         className={`grid min-w-0 flex-1 place-items-center px-2 py-3 text-center font-heading text-xl leading-[1.3] wrap-break-word whitespace-pre-line md:px-[4cqw] md:py-0 ${
