@@ -25,6 +25,10 @@ export function parseCategory(value: string | string[] | undefined): CategorySlu
   return categories.find((category) => category.slug === slug)?.slug ?? "all";
 }
 
+export function getProductById(id: string): Product | undefined {
+  return products.find((product) => product.id === id);
+}
+
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((product) => product.slug === slug);
 }

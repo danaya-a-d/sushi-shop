@@ -25,11 +25,12 @@ The goal is to build a realistic, maintainable MVP while keeping the scope manag
 - `/` — homepage
 - `/catalog` — product catalog
 - `/products/[slug]` — individual product page
-- `/cart` — shopping cart
 - `/checkout` — checkout
 - `/order/result` — order result
 
 Do not introduce additional pages without discussing them first.
+
+The cart is implemented as a CartDrawer (native `<dialog>`, opened from the Header; the URL does not change), not as a separate route. `/checkout` remains a separate route. Opening product pages in a modal is postponed.
 
 ## Architecture guidelines
 
@@ -77,7 +78,7 @@ The MVP includes:
 1. Homepage
 2. Catalog
 3. Product detail
-4. Shopping cart
+4. Shopping cart (CartDrawer)
 5. Checkout
 6. Order result
 

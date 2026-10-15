@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Gabriela, Montserrat } from "next/font/google";
+import { CartProvider } from "@/components/cart/CartProvider";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import "./globals.css";
@@ -28,9 +29,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${gabriela.variable} ${montserrat.variable} antialiased`}
     >
       <body className="flex min-h-screen flex-col">
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
+        <CartProvider>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );
