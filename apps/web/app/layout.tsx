@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Gabriela, Montserrat } from "next/font/google";
+import { CartDrawer } from "@/components/cart/CartDrawer";
+import { CartDrawerProvider } from "@/components/cart/CartDrawerProvider";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -30,9 +32,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-screen flex-col">
         <CartProvider>
-          <Header />
-          <div className="flex-1">{children}</div>
-          <Footer />
+          <CartDrawerProvider>
+            <Header />
+            <div className="flex-1">{children}</div>
+            <Footer />
+            <CartDrawer />
+          </CartDrawerProvider>
         </CartProvider>
       </body>
     </html>
