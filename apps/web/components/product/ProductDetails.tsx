@@ -1,7 +1,7 @@
 import Image from "next/image";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { NutritionFacts } from "@/components/product/NutritionFacts";
 import { DecorCircles, PRODUCT_CIRCLES } from "@/components/shared/DecorCircles";
-import { Button } from "@/components/ui/Button";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { formatPrice, formatWeight } from "@/lib/format-price";
 import type { Product } from "@/types/product";
@@ -50,14 +50,17 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
         {product.nutrition && <NutritionFacts nutrition={product.nutrition} />}
 
-        {/* Зона покупки; кнопка презентационная, корзина будет подключена позже */}
+        {/* Зона покупки */}
         <div className="flex flex-col gap-4 rounded-[30px] bg-lavender/40 p-5 md:max-lg:flex-row md:max-lg:items-center md:max-lg:justify-between xl:flex-row xl:items-center xl:justify-between md:gap-6 md:rounded-[50px] md:py-6 md:pr-6 md:pl-8">
           <p className="text-3xl leading-[1.3] font-medium md:text-4xl">
             {formatPrice(product.price)}
           </p>
-          <Button type="button" className="w-full md:w-auto lg:max-xl:w-full">
-            В корзину
-          </Button>
+          <AddToCartButton
+            productId={product.id}
+            productName={product.name}
+            label="В корзину"
+            className="w-full md:w-auto lg:max-xl:w-full"
+          />
         </div>
       </div>
     </div>

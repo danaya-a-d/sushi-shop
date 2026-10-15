@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { formatPrice, formatWeight } from "@/lib/format-price";
 import type { Product } from "@/types/product";
 
@@ -45,14 +45,14 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="self-end text-right text-xs font-medium leading-[1.3] opacity-60 md:order-1 md:col-span-2 md:text-left md:text-sm">
             {formatWeight(product.weight)}
           </p>
-          <Button
-            href={href}
+          <AddToCartButton
+            productId={product.id}
+            productName={product.name}
+            label="Купить"
             size="s"
             aria-label={`Купить: ${product.name}`}
             className="col-span-2 mt-3 w-full md:order-3 md:col-span-1 md:mt-5 md:w-auto"
-          >
-            Купить
-          </Button>
+          />
         </div>
       </div>
     </article>
