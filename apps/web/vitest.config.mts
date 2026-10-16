@@ -8,7 +8,8 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["**/*.test.ts"],
+    // Окружение по умолчанию node; компонентные тесты включают DOM докблоком `// @vitest-environment jsdom`
+    include: ["**/*.test.{ts,tsx}"],
     exclude: ["node_modules/**", ".next/**"],
   },
 });

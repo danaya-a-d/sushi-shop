@@ -51,51 +51,82 @@ function isValidPhone(value: string): boolean {
   return digits >= PHONE_MIN_DIGITS && digits <= PHONE_MAX_DIGITS;
 }
 
-const optionalText = (max: number, message: string) =>
-  z.string().trim().max(max, message);
+// Адресные поля: максимальная длина проверяется только для курьера (см. superRefine в схеме),
+// иначе скрытое при самовывозе, но сохранённое в форме значение блокировало бы отправку.
+const ADDRESS_LIMITS = {
+  street: 100,
+  house: 20,
+  apartment: 20,
+  floor: 10,
+  intercom: 20,
+} as const;
+
+const ADDRESS_LIMIT_MESSAGES = {
+  street: "Не больше 100 символов",
+  house: "Не больше 20 символов",
+  apartment: "Не больше 20 символов",
+  floor: "Не больше 10 символов",
+  intercom: "Не больше 20 символов",
+} as const;
+
+// Показывает только первую ошибку поля. Zod-овский `abort` здесь не годится: прерывающая ошибка поля
+// отключает проверки всего объекта, и ошибки адреса не показывались бы, пока имя или телефон пусты.
+function firstError(rules: readonly (readonly [valid: (value: string) => boolean, message: string])[]) {
+  return (value: string, context: z.RefinementCtx) => {
+    const failed = rules.find(([valid]) => !valid(value));
+    if (failed) context.addIssue({ code: "custom", message: failed[1] });
+  };
+}
 
 export const checkoutSchema = z
   .object({
     name: z
       .string()
       .trim()
-      .min(1, { error: "Введите имя и фамилию", abort: true })
-      .min(2, { error: "Имя слишком короткое", abort: true })
-      .max(100, { error: "Не больше 100 символов", abort: true })
-      .regex(NAME_PATTERN, "Используйте буквы, пробел и дефис"),
+      .superRefine(
+        firstError([
+          [(value) => value.length >= 1, "Введите имя и фамилию"],
+          [(value) => value.length >= 2, "Имя слишком короткое"],
+          [(value) => value.length <= 100, "Не больше 100 символов"],
+          [(value) => NAME_PATTERN.test(value), "Используйте буквы, пробел и дефис"],
+        ]),
+      ),
     phone: z
       .string()
       .trim()
-      .min(1, { error: "Введите номер телефона", abort: true })
-      .max(30, { error: "Номер слишком длинный", abort: true })
-      .refine(isValidPhone, "Введите корректный номер телефона"),
+      .superRefine(
+        firstError([
+          [(value) => value.length >= 1, "Введите номер телефона"],
+          [(value) => value.length <= 30, "Номер слишком длинный"],
+          [isValidPhone, "Введите корректный номер телефона"],
+        ]),
+      ),
     delivery: z.enum(deliveryValues, "Выберите способ доставки"),
     // Адресные поля всегда присутствуют в значениях формы (чтобы введённое не терялось
-    // при переключении доставки), а обязательность проверяется в superRefine ниже.
-    street: optionalText(100, "Не больше 100 символов"),
-    house: optionalText(20, "Не больше 20 символов"),
-    apartment: optionalText(20, "Не больше 20 символов"),
-    floor: optionalText(10, "Не больше 10 символов"),
-    intercom: optionalText(20, "Не больше 20 символов"),
-    comment: optionalText(500, "Не больше 500 символов"),
+    // при переключении доставки); обязательность и длина проверяются в superRefine ниже.
+    street: z.string().trim(),
+    house: z.string().trim(),
+    apartment: z.string().trim(),
+    floor: z.string().trim(),
+    intercom: z.string().trim(),
+    comment: z.string().trim().max(500, "Не больше 500 символов"),
     payment: z.enum(paymentValues, "Выберите способ оплаты"),
   })
   .superRefine((values, context) => {
+    // Самовывоз: адрес скрыт и не участвует в проверке (значения остаются в форме)
     if (values.delivery !== "courier") return;
 
     if (values.street === "") {
-      context.addIssue({
-        code: "custom",
-        path: ["street"],
-        message: "Укажите улицу",
-      });
+      context.addIssue({ code: "custom", path: ["street"], message: "Укажите улицу" });
     }
     if (values.house === "") {
-      context.addIssue({
-        code: "custom",
-        path: ["house"],
-        message: "Укажите дом",
-      });
+      context.addIssue({ code: "custom", path: ["house"], message: "Укажите дом" });
+    }
+
+    for (const field of Object.keys(ADDRESS_LIMITS) as (keyof typeof ADDRESS_LIMITS)[]) {
+      if (values[field].length > ADDRESS_LIMITS[field]) {
+        context.addIssue({ code: "custom", path: [field], message: ADDRESS_LIMIT_MESSAGES[field] });
+      }
     }
   });
 

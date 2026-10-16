@@ -204,6 +204,62 @@ describe("checkoutSchema: ограничения длины", () => {
   });
 });
 
+describe("checkoutSchema: скрытый адрес при самовывозе", () => {
+  const tooLongAddress = {
+    street: "а".repeat(101),
+    house: "1".repeat(21),
+    apartment: "2".repeat(21),
+    floor: "3".repeat(11),
+    intercom: "4".repeat(21),
+  };
+
+  it("самовывоз с адресом, превышающим лимиты, проходит проверку", () => {
+    const result = checkoutSchema.safeParse({ ...validPickup, ...tooLongAddress });
+    expect(result.success).toBe(true);
+  });
+
+  it("курьер с теми же значениями не проходит: ошибка в каждом адресном поле", () => {
+    const errors = errorsOf({ ...validCourier, ...tooLongAddress });
+    expect(Object.keys(errors).sort()).toEqual(["apartment", "floor", "house", "intercom", "street"]);
+    expect(errors.street).toEqual(["Не больше 100 символов"]);
+    expect(errors.floor).toEqual(["Не больше 10 символов"]);
+  });
+
+  it("смена доставки на тех же значениях: самовывоз проходит, курьер нет, и наоборот", () => {
+    const values = { ...validPickup, ...tooLongAddress };
+    expect(checkoutSchema.safeParse(values).success).toBe(true);
+    expect(checkoutSchema.safeParse({ ...values, delivery: "courier" }).success).toBe(false);
+    expect(checkoutSchema.safeParse({ ...values, delivery: "pickup" }).success).toBe(true);
+  });
+
+  it("самовывоз: адрес из одних пробелов и слишком длинный адрес не мешают", () => {
+    expect(checkoutSchema.safeParse({ ...validPickup, street: "   ", house: " ".repeat(50) }).success).toBe(true);
+  });
+
+  it("при самовывозе по-прежнему проверяются контакты, комментарий и оплата", () => {
+    const errors = errorsOf({
+      ...validPickup,
+      ...tooLongAddress,
+      name: "",
+      phone: "abc",
+      comment: "а".repeat(501),
+      payment: "card_online",
+    });
+    expect(Object.keys(errors).sort()).toEqual(["comment", "name", "payment", "phone"]);
+  });
+
+  it("пустая форма курьера: ошибки адреса показываются вместе с ошибками имени и телефона", () => {
+    const errors = errorsOf(checkoutDefaultValues);
+    expect(Object.keys(errors).sort()).toEqual(["house", "name", "phone", "street"]);
+  });
+
+  it("значения адреса при самовывозе не очищаются схемой (кроме обрезки пробелов)", () => {
+    const result = checkoutSchema.safeParse({ ...validPickup, street: "  Хрещатик  ", house: "25" });
+    expect(result.success && result.data.street).toBe("Хрещатик");
+    expect(result.success && result.data.house).toBe("25");
+  });
+});
+
 describe("checkoutSchema: оплата", () => {
   it.each(paymentOptions.map((option) => option.value))("принимает «%s»", (payment) => {
     expect(checkoutSchema.safeParse({ ...validCourier, payment }).success).toBe(true);
