@@ -16,6 +16,8 @@
   --color-on-accent: #f0ffc9;
   --color-accent: #abc26c;
   --color-accent-hover: #a8c656;
+  /* ошибки формы; в макете состояния ошибки нет */
+  --color-error: #b3261e;
 
   --font-heading: var(--font-gabriela), serif;
   --font-sans: var(--font-montserrat), system-ui, sans-serif;
@@ -218,4 +220,156 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-primary-focus);
   outline-offset: 3px;
+}
+
+/*
+ * Радиокнопка формы оформления заказа по макету: круг 20 px, заливка lime, обводка 1 px lavender-primary,
+ * при выборе внутри точка 8 px. Нативный input сохранён; точка нарисована фоном самого input
+ * (без псевдоэлемента, который не везде отрисовывается у input). accent-color: запасной вариант,
+ * если браузер не применит appearance: none.
+ */
+.radio-field {
+  -webkit-appearance: none;
+  appearance: none;
+  accent-color: var(--color-primary);
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 1px solid var(--color-primary);
+  border-radius: 9999px;
+  background-color: var(--color-lime);
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.radio-field:checked {
+  background-image: radial-gradient(
+    circle at center,
+    var(--color-primary) 0 4px,
+    transparent 4.5px
+  );
+}
+
+.radio-field:disabled {
+  cursor: default;
+}
+
+/*
+ * ProductCarousel («Может понравиться»): горизонтальная прокрутка со scroll-snap, где карточки
+ * всегда видны целиком. Ширина карточки считается от ширины самой карусели (единицы cqw
+ * контейнера .product-carousel): (ширина − место под стрелку − промежутки) / число карточек.
+ * Число карточек (--n) зависит от ширины карусели: 2 → 3 (от 880 px) → 4 (от 1180 px).
+ * Стрелка занимает отдельную колонку grid, поэтому карточки под неё не заходят:
+ *   mobile — справа от заголовка; md+ — справа от списка на уровне изображения;
+ *   с 1480 px — в поле за правым краем контента (там хватает места, а список занимает всю ширину).
+ */
+.product-carousel {
+  container-type: inline-size;
+}
+
+.product-carousel-body {
+  --n: 2;
+  --gap: 20px;
+  --arrow: 40px;
+  --arrow-gap: 12px;
+  --reserve: 0px;
+  --head-gap: 40px;
+  --card: calc((100cqw - var(--reserve) - (var(--n) - 1) * var(--gap)) / var(--n));
+  /*
+   * Запас под тень карточки (0 4px 25px) у краёв прокручиваемого списка, иначе overflow её обрезает.
+   * Не больше промежутка между карточками (--gap), иначе соседняя карточка выглядывала бы из запаса.
+   */
+  --shadow-room: 20px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--arrow-gap);
+  row-gap: var(--head-gap);
+  align-items: center;
+}
+
+@container (min-width: 880px) {
+  .product-carousel-body {
+    --n: 3;
+  }
+}
+
+@container (min-width: 1180px) {
+  .product-carousel-body {
+    --n: 4;
+  }
+}
+
+.product-carousel-heading {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.product-carousel-arrow {
+  position: relative;
+  z-index: 1;
+  grid-column: 2;
+  grid-row: 1;
+  width: var(--arrow);
+  height: var(--arrow);
+}
+
+.product-carousel-list {
+  display: flex;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  gap: var(--gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--shadow-room);
+  /* Внутренние отступы и такие же отрицательные внешние: тень крайних карточек не обрезается
+     по краю прокрутки, а положение карточек не меняется. Вертикальные нужны для тени сверху и снизу
+     (4 + 25 px) */
+  margin: -32px calc(-1 * var(--shadow-room));
+  padding: 32px var(--shadow-room);
+  align-self: start;
+}
+
+.product-carousel-item {
+  flex: 0 0 var(--card);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .product-carousel-body {
+    --gap: 30px;
+    --arrow: 45px;
+    --arrow-gap: 25px;
+    --shadow-room: 25px;
+    --reserve: calc(var(--arrow) + var(--arrow-gap));
+    --head-gap: 60px;
+  }
+
+  /* Стрелка во втором ряду, на уровне изображения карточки (его высота = 230/300 ширины карточки) */
+  .product-carousel-arrow {
+    grid-row: 2;
+    align-self: start;
+    margin-top: calc(var(--card) * 230 / 300 / 2 - var(--arrow) / 2);
+  }
+
+  .product-carousel-list {
+    grid-column: 1;
+  }
+}
+
+@media (min-width: 1480px) {
+  /* Колонка стрелки нулевой ширины: сама кнопка выступает в поле справа от контента */
+  .product-carousel-body {
+    --reserve: 0px;
+    grid-template-columns: minmax(0, 1fr) 0;
+    column-gap: 0;
+  }
+
+  .product-carousel-arrow {
+    margin-left: var(--arrow-gap);
+    justify-self: start;
+  }
 }

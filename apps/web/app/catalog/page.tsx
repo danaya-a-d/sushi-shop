@@ -38,7 +38,7 @@ export default function CatalogPage({
         <PromoList promos={getPromos()} layout="carousel" id={PROMOS_ID} />
         <CarouselArrow
           targetId={PROMOS_ID}
-          className="absolute top-1/2 right-2 hidden -translate-y-1/2 lg:grid min-[1375px]:right-5 min-[1375px]:translate-x-1/2"
+          className="absolute top-1/2 right-2 hidden size-[45px] -translate-y-1/2 lg:grid min-[1375px]:right-5 min-[1375px]:translate-x-1/2"
         />
       </Container>
 

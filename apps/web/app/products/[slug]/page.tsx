@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/Container";
 import { ProductDetails } from "@/components/product/ProductDetails";
-import { ProductGrid } from "@/components/product/ProductGrid";
+import { ProductCarousel } from "@/components/product/ProductCarousel";
 import { MediaText } from "@/components/shared/MediaText";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
@@ -51,10 +51,11 @@ export default async function ProductPage({
       </Container>
 
       <Container className="mt-20 md:mt-[100px] lg:mt-[120px]">
-        <SectionTitle>Может понравиться</SectionTitle>
-        <ProductGrid
+        <ProductCarousel
+          id="related-products"
           products={getRelatedProducts(product)}
-          className="mt-10 md:mx-auto md:mt-[60px] md:max-w-[630px] lg:max-w-none"
+          className="[--head-gap:40px] md:[--head-gap:60px]"
+          heading={<SectionTitle>Может понравиться</SectionTitle>}
         />
       </Container>
 

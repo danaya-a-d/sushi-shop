@@ -165,17 +165,18 @@ export function CartDrawer() {
               <p className="text-xl font-medium whitespace-nowrap md:text-4xl">
                 {isReady ? formatPrice(total) : ""}
               </p>
-              <Button
-                disabled
-                aria-describedby="checkout-note"
-                className="disabled:opacity-50 disabled:hover:bg-primary"
-              >
-                Оформить заказ
-              </Button>
+              {/* Пока корзина не восстановлена, вместо ссылки неактивная кнопка.
+                  onClick={close}: на самой /checkout путь не меняется, и корзина сама не закроется */}
+              {isReady ? (
+                <Button href="/checkout" onClick={close}>
+                  Оформить заказ
+                </Button>
+              ) : (
+                <Button disabled className="disabled:opacity-50 disabled:hover:bg-primary">
+                  Оформить заказ
+                </Button>
+              )}
             </div>
-            <p id="checkout-note" className="mt-2 text-right text-xs opacity-60 md:text-sm">
-              Оформление заказа скоро будет доступно.
-            </p>
           </div>
         )}
       </div>
