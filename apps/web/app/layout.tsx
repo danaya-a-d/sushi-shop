@@ -28,6 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="ru"
+      data-scroll-behavior="smooth"
       className={`${gabriela.variable} ${montserrat.variable} antialiased`}
     >
       <body className="flex min-h-screen flex-col">

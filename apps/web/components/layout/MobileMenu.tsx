@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useCartDrawer } from "@/components/cart/CartDrawerProvider";
 import { BurgerIcon, CloseIcon } from "@/components/ui/icons";
 import { NavLinks } from "./NavLinks";
 import { SocialLinks } from "./SocialLinks";
@@ -14,6 +15,16 @@ const MENU_ID = "mobile-menu";
  */
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
+  const { isOpen: isCartOpen } = useCartDrawer();
+
+  // Корзина открывается поверх меню: меню закрываем, чтобы после корзины вернуться на обычную
+  // страницу. Состояние подстраивается при смене значения из контекста (без эффекта),
+  // см. react.dev: «Adjusting some state when a prop changes».
+  const [wasCartOpen, setWasCartOpen] = useState(isCartOpen);
+  if (isCartOpen !== wasCartOpen) {
+    setWasCartOpen(isCartOpen);
+    if (isCartOpen) setOpen(false);
+  }
 
   useEffect(() => {
     if (!open) return;

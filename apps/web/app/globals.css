@@ -87,26 +87,65 @@
   transition-timing-function: var(--ease-lift);
 }
 
-/* CartDrawer: панель выезжает справа, затемнение проявляется (только при открытии) */
-@keyframes drawer-panel-in {
-  from {
-    opacity: 0;
-    translate: 32px 0;
-  }
+/*
+ * CartDrawer: плавное открытие и закрытие нативного <dialog> средствами CSS, без таймеров.
+ * Состояние «открыт» задаёт атрибут [open] (его ставят showModal/close), а @starting-style
+ * и transition с allow-discrete для display/overlay оставляют диалог на экране и в верхнем
+ * слое, пока доигрывает анимация закрытия.
+ */
+.cart-drawer,
+.cart-drawer::backdrop {
+  --drawer-open: 300ms;
+  --drawer-close: 220ms;
 }
 
-@keyframes drawer-backdrop-in {
-  from {
-    opacity: 0;
-  }
+.cart-drawer {
+  transition:
+    display var(--drawer-close) allow-discrete,
+    overlay var(--drawer-close) allow-discrete;
+}
+
+/* Пока панель уезжает, диалог не должен перехватывать клики по странице */
+.cart-drawer:not([open]) {
+  pointer-events: none;
+}
+
+.cart-drawer .cart-drawer-panel {
+  translate: 100% 0;
+  /* закрытие: ускоряется к концу */
+  transition: translate var(--drawer-close) cubic-bezier(0.4, 0, 1, 1);
 }
 
 .cart-drawer[open] .cart-drawer-panel {
-  animation: drawer-panel-in var(--duration-slow) var(--ease-ui);
+  translate: 0 0;
+  /* открытие: быстрый старт и мягкая остановка */
+  transition: translate var(--drawer-open) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .cart-drawer::backdrop {
-  animation: drawer-backdrop-in var(--duration-slow) var(--ease-ui);
+  opacity: 0;
+  transition:
+    opacity var(--drawer-close) var(--ease-ui),
+    display var(--drawer-close) allow-discrete,
+    overlay var(--drawer-close) allow-discrete;
+}
+
+.cart-drawer[open]::backdrop {
+  opacity: 1;
+  transition:
+    opacity var(--drawer-open) var(--ease-ui),
+    display var(--drawer-open) allow-discrete,
+    overlay var(--drawer-open) allow-discrete;
+}
+
+@starting-style {
+  .cart-drawer[open] .cart-drawer-panel {
+    translate: 100% 0;
+  }
+
+  .cart-drawer[open]::backdrop {
+    opacity: 0;
+  }
 }
 
 /* Блокировка прокрутки страницы под открытой корзиной; gutter сохраняет ширину страницы без скачка */
@@ -116,9 +155,10 @@ html:has(.cart-drawer[open]) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cart-drawer[open] .cart-drawer-panel,
+  .cart-drawer,
   .cart-drawer::backdrop {
-    animation-duration: 0.01ms;
+    --drawer-open: 0.01ms;
+    --drawer-close: 0.01ms;
   }
 }
 
@@ -131,8 +171,36 @@ html:has(.cart-drawer[open]) {
   }
 }
 
+/* Высота Header: до lg он закреплён, и якоря / переход на страницу не должны прятать контент под ним */
+:root {
+  --header-height: 72px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-height: 115px;
+  }
+}
+
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--header-height);
+}
+
+@media (min-width: 1024px) {
+  html {
+    scroll-padding-top: 0;
+  }
+}
+
+/*
+ * Next.js при переходе прокручивает к началу первого элемента страницы (<main>), минуя Header
+ * из layout. scroll-margin-top возвращает Header в кадр; flow-root не даёт верхнему отступу
+ * первого блока «вытечь» наружу и сдвинуть main вниз (иначе прокрутка остановится ниже Header).
+ */
+main {
+  display: flow-root;
+  scroll-margin-top: var(--header-height);
 }
 
 @media (prefers-reduced-motion: reduce) {

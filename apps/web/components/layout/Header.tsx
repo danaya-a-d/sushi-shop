@@ -8,7 +8,7 @@ import { NavLinks } from "./NavLinks";
 
 export function Header() {
   return (
-    <header className="relative z-30 bg-lime lg:bg-transparent">
+    <header className="sticky top-0 z-30 bg-lime lg:relative lg:bg-transparent">
       <Container className="grid h-[72px] grid-cols-[auto_1fr_auto] items-center md:h-[115px] md:grid-cols-[1fr_auto_1fr]">
         <MobileMenu />
 

@@ -78,7 +78,9 @@ export function CartDrawer() {
           close();
         }
       }}
-      className="cart-drawer m-0 size-full max-h-none max-w-none bg-transparent p-0 text-ink backdrop:bg-accent/50 backdrop:backdrop-blur-[5px]"
+      // overflow-clip, а не hidden: hidden делает <dialog> прокручиваемым контейнером, и при фокусе
+      // на кнопке «Закрыть» внутри уехавшей за край панели браузер прокручивал диалог к ней, а анимация выезда пропадала
+      className="cart-drawer m-0 size-full max-h-none max-w-none overflow-clip bg-transparent p-0 text-ink backdrop:bg-accent/50 backdrop:backdrop-blur-[5px]"
     >
       <div className="cart-drawer-panel ml-auto flex h-dvh w-full flex-col bg-white lg:w-[clamp(560px,49vw,945px)]">
         <div className="flex shrink-0 items-center justify-between gap-4 px-5 pt-5 md:pt-[50px] lg:px-10 xl:px-[60px]">
