@@ -24,6 +24,7 @@ The goal is to build a realistic, maintainable MVP while keeping the scope manag
 
 - `/` — homepage
 - `/catalog` — product catalog
+- `/about` — about page (part of the current frontend implementation)
 - `/products/[slug]` — individual product page
 - `/checkout` — checkout
 - `/order/result` — order result

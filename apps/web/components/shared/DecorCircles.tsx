@@ -22,6 +22,24 @@ export const ABOUT_CIRCLES: readonly Circle[] = [
   { color: "bg-accent", size: 18.8, left: 81.1, top: 81.2 },
 ];
 
+/** Те же круги, зеркально: для фото справа от текста */
+export const ABOUT_CIRCLES_MIRRORED: readonly Circle[] = [
+  { color: "bg-lavender", size: 31.3, left: 61.7, top: 0 },
+  { color: "bg-primary", size: 22.2, left: 77.8, top: 20.9 },
+  { color: "bg-ink", size: 14.3, left: 85.7, top: 61.2 },
+  { color: "bg-accent", size: 18.8, left: 0, top: 81.2 },
+];
+
+/** Круги первого экрана «О нас» (Figma 1073×414): круги вокруг заголовка */
+export const ABOUT_HERO_CIRCLES: readonly Circle[] = [
+  { color: "bg-lavender", size: 21.3, left: 0, top: 4.1 },
+  { color: "bg-primary", size: 15.1, left: 13.8, top: 0 },
+  { color: "bg-accent", size: 9.7, left: 2.8, top: 47.3 },
+  { color: "bg-ink", size: 6.7, left: 89.6, top: 38.4 },
+  { color: "bg-accent", size: 9.7, left: 90.3, top: 51.7 },
+  { color: "bg-primary", size: 15.1, left: 82.6, top: 61.6 },
+];
+
 /**
  * Асимметричные круги плашки товара (плашка занимает left 4–96%, top 0–92%
  * обёртки). Рисуются поверх плашки и лишь слегка заходят на её край, фото не
