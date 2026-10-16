@@ -68,19 +68,13 @@ The frontend follows Next.js App Router conventions and uses Server Components b
 
 Business logic is kept separate from presentation components, with an emphasis on strict TypeScript typing, reusable components and maintainable code.
 
-## AI-Assisted Development
+## Development Workflow
 
-Claude Code is used as part of the development workflow for selected implementation and refactoring tasks.
+Claude Code is used selectively to speed up routine implementation and refactoring work.
 
-The workflow includes:
-- providing project context and requirements;
-- decomposing tasks before implementation;
-- reviewing generated diffs and source code;
-- running tests, lint and build checks;
-- manually validating the resulting behaviour;
-- iterating on implementation when necessary.
+I remain responsible for the engineering decisions and final result: I define the task and constraints, review generated diffs and source code, verify that changes fit the existing architecture, run tests/lint/build checks, test the UI and behaviour manually, and iterate when needed.
 
-AI-generated changes are treated as code that requires the same review and verification as manually written code.
+AI assistance is treated as a productivity tool rather than a substitute for understanding, review or ownership of the codebase.
 
 ## Running Locally
 
