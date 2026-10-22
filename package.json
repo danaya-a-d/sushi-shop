@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "concurrently -k -n web,api -c cyan,green \"pnpm --filter web dev\" \"pnpm --filter api start:dev\"",
     "dev:web": "pnpm --filter web dev",
-    "dev:api": "pnpm --filter api start:dev"
+    "dev:api": "pnpm --filter api start:dev",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres"
   },
   "devDependencies": {
     "concurrently": "^10.0.6"
