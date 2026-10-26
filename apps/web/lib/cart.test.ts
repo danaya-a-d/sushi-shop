@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   type CartAction,
   type CartState,
@@ -11,18 +11,7 @@ import {
   sanitizeCart,
 } from "@/lib/cart";
 
-// Каталог подменён двумя тестовыми товарами: тесты не зависят от data/products.ts.
-// Реальный каталог проверяется отдельно, в cart.catalog.test.ts.
-vi.mock("@/lib/catalog", () => {
-  const testProducts = [
-    { id: "test-a", price: 100 },
-    { id: "test-b", price: 250 },
-  ];
-  return {
-    getProductById: (id: string) =>
-      testProducts.find((product) => product.id === id),
-  };
-});
+// Корзина не знает, какие товары существуют: цены ей подставляет справочник (lookup), id проверяет формат.
 
 const A = "test-a"; // 100 грн
 const B = "test-b"; // 250 грн
@@ -91,11 +80,28 @@ describe("cartReducer", () => {
     expect(run(full, { type: "increment", productId: A })).toEqual(full);
   });
 
-  it("неизвестный productId не добавляется и не вызывает ошибку", () => {
+  it("add: товар, которого нет в загруженных данных, всё равно добавляется (существование решает API)", () => {
+    expect(run(emptyCart, { type: "add", productId: "not-loaded-yet" })).toEqual(
+      cart(["not-loaded-yet", 1]),
+    );
+  });
+
+  it("id недопустимого вида не добавляется и не вызывает ошибку", () => {
     const state = cart([A, 1]);
     const actions: CartAction[] = [
-      { type: "add", productId: "unknown" },
-      { type: "increment", productId: "unknown" },
+      { type: "add", productId: "bad id!" },
+      { type: "increment", productId: "" },
+      { type: "decrement", productId: "unknown" },
+      { type: "remove", productId: "unknown" },
+    ];
+    for (const action of actions) {
+      expect(cartReducer(state, action)).toEqual(state);
+    }
+  });
+
+  it("decrement и remove неизвестного id ничего не меняют", () => {
+    const state = cart([A, 1]);
+    const actions: CartAction[] = [
       { type: "decrement", productId: "unknown" },
       { type: "remove", productId: "unknown" },
     ];
@@ -119,7 +125,7 @@ describe("cartReducer", () => {
 
   it("если действие ничего не меняет, возвращает то же состояние (React не перерисуется)", () => {
     const state = cart([A, 1]);
-    expect(cartReducer(state, { type: "add", productId: "unknown" })).toBe(state);
+    expect(cartReducer(state, { type: "add", productId: "bad id!" })).toBe(state);
     expect(cartReducer(emptyCart, { type: "clear" })).toBe(emptyCart);
   });
 
@@ -173,8 +179,10 @@ describe("getCartTotal", () => {
     expect(getCartTotal(cart(["a", 1], ["gone", 5]), lookup)).toBe(100);
   });
 
-  it("без lookup берёт цены из каталога (здесь подменён: test-a — 100, test-b — 250)", () => {
-    expect(getCartTotal(cart([A, 2], [B, 1]))).toBe(2 * 100 + 250);
+  it("дробные цены суммируются без накопления ошибки округления", () => {
+    const fractional = (id: string) => ({ id, price: 0.1 });
+    expect(getCartTotal(cart(["a", 3]), fractional)).toBe(0.3);
+    expect(getCartTotal(cart(["a", 1], ["b", 2]), (id) => ({ id, price: id === "a" ? 0.1 : 0.2 }))).toBe(0.5);
   });
 });
 
@@ -191,9 +199,16 @@ describe("sanitizeCart", () => {
     },
   );
 
-  it("отбрасывает неизвестные товары", () => {
-    const input = { items: [{ productId: "unknown", quantity: 1 }, { productId: A, quantity: 1 }] };
-    expect(sanitizeCart(input)).toEqual(cart([A, 1]));
+  it("сохраняет товары, которых может не быть в каталоге: их проверяет API, а не корзина", () => {
+    const input = { items: [{ productId: "deleted-long-ago", quantity: 2 }, { productId: A, quantity: 1 }] };
+    expect(sanitizeCart(input)).toEqual(cart(["deleted-long-ago", 2], [A, 1]));
+  });
+
+  it("отбрасывает id недопустимого вида", () => {
+    const bad = ["", "a b", "a,b", "x".repeat(65), "../1", 7, null];
+    for (const productId of bad) {
+      expect(sanitizeCart({ items: [{ productId, quantity: 1 }] })).toEqual(emptyCart);
+    }
   });
 
   it("отбрасывает записи с недопустимым количеством", () => {

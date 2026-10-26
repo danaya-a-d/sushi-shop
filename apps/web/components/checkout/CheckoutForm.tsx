@@ -3,10 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { CartItem } from "@/components/cart/CartItem";
+import { CartLineItem } from "@/components/cart/CartLineItem";
 import { useCart } from "@/components/cart/CartProvider";
+import { CartStatusNotice } from "@/components/cart/CartStatusNotice";
 import { Button } from "@/components/ui/Button";
-import { getProductById } from "@/lib/catalog";
 import {
   type CheckoutFormValues,
   checkoutDefaultValues,
@@ -35,7 +35,25 @@ const fieldsetClass = "min-w-0 md:max-w-[630px] lg:max-w-none";
  * формы живут в React Hook Form, а их проверка описана Zod-схемой.
  */
 export function CheckoutForm({ recommended }: CheckoutFormProps) {
-  const { items, total, isReady, increment, decrement, remove } = useCart();
+  const {
+    lines,
+    total,
+    totalReliable,
+    status,
+    hasUnavailable,
+    canCheckout,
+    isReady,
+    increment,
+    decrement,
+    remove,
+    refresh,
+  } = useCart();
+
+  // Переход на checkout перепроверяет цены и наличие одним пакетным запросом
+  // (если запрос уже идёт, например после загрузки страницы, повторный не создаётся)
+  useEffect(() => {
+    if (isReady) refresh();
+  }, [isReady, refresh]);
 
   const {
     register,
@@ -54,22 +72,17 @@ export function CheckoutForm({ recommended }: CheckoutFormProps) {
 
   const [notice, setNotice] = useState(false);
 
-  const entries = items.flatMap((item) => {
-    const product = getProductById(item.productId);
-    return product ? [{ product, quantity: item.quantity }] : [];
-  });
-
   // Удалили позицию, на которой стоял фокус: кнопка исчезла, фокус «упал» на body.
   // Возвращаем его на заголовок раздела (в пустом состоянии он тоже есть).
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const lines = entries.length;
-  const previousLines = useRef(lines);
+  const lineCount = lines.length;
+  const previousLines = useRef(lineCount);
   useEffect(() => {
-    if (lines < previousLines.current && document.activeElement === document.body) {
+    if (lineCount < previousLines.current && document.activeElement === document.body) {
       headingRef.current?.focus();
     }
-    previousLines.current = lines;
-  }, [lines]);
+    previousLines.current = lineCount;
+  }, [lineCount]);
 
   // Пока корзина читается из localStorage, items пустой лишь потому, что данные ещё не прочитаны:
   // «Корзина пуста» показывать нельзя. Сервер и первый клиентский рендер совпадают (isReady = false).
@@ -83,7 +96,7 @@ export function CheckoutForm({ recommended }: CheckoutFormProps) {
     );
   }
 
-  if (entries.length === 0) {
+  if (lines.length === 0) {
     return (
       <div className="flex flex-col items-center pt-10 pb-20 text-center md:pt-[60px] md:pb-[140px] lg:pb-0">
         <h2
@@ -109,7 +122,10 @@ export function CheckoutForm({ recommended }: CheckoutFormProps) {
 
   // Здесь будет отправка заказа на сервер. Пока backend нет: данные не сохраняются,
   // корзина не очищается, переход на другую страницу не выполняется.
-  const onValid = () => setNotice(true);
+  // Недоступные позиции или непроверенные цены оформлению мешают (кнопка к тому же заблокирована).
+  const onValid = () => {
+    if (canCheckout) setNotice(true);
+  };
 
   return (
     <form
@@ -130,15 +146,20 @@ export function CheckoutForm({ recommended }: CheckoutFormProps) {
           >
             Ваш заказ
           </h2>
+          <CartStatusNotice
+            status={status}
+            hasUnavailable={hasUnavailable}
+            onRetry={refresh}
+            className="mb-5 md:mb-[30px]"
+          />
           <ul className="flex flex-col gap-5 md:gap-10 lg:gap-[30px]">
-            {entries.map(({ product, quantity }) => (
-              <CartItem
-                key={product.id}
-                product={product}
-                quantity={quantity}
-                onIncrement={() => increment(product.id)}
-                onDecrement={() => decrement(product.id)}
-                onRemove={() => remove(product.id)}
+            {lines.map((line) => (
+              <CartLineItem
+                key={line.productId}
+                line={line}
+                onIncrement={() => increment(line.productId)}
+                onDecrement={() => decrement(line.productId)}
+                onRemove={() => remove(line.productId)}
               />
             ))}
           </ul>
@@ -280,12 +301,21 @@ export function CheckoutForm({ recommended }: CheckoutFormProps) {
 
         <div className="mt-5 flex items-center justify-between gap-4 md:mt-[30px]">
           <p className="text-xl font-medium whitespace-nowrap md:text-4xl">
-            {formatPrice(orderTotal)}
+            {totalReliable ? formatPrice(orderTotal) : "—"}
           </p>
-          <Button type="submit">Оформить заказ</Button>
+          <Button
+            type="submit"
+            disabled={!canCheckout}
+            className="disabled:opacity-50 disabled:hover:bg-primary"
+          >
+            Оформить заказ
+          </Button>
         </div>
 
         <div role="status">
+          {status === "loading" && (
+            <p className="mt-4 text-sm leading-[1.3] md:text-base">Проверяем цены и наличие товаров…</p>
+          )}
           {notice && (
             <p className="mt-4 text-sm leading-[1.3] md:text-base">{SUBMIT_NOTICE}</p>
           )}

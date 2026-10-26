@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+import { unstable_rethrow } from "next/navigation";
 import { Suspense } from "react";
 import { Container } from "@/components/layout/Container";
-import { ProductCatalog } from "@/components/product/ProductCatalog";
+import { ProductCatalog, ProductCatalogSkeleton } from "@/components/product/ProductCatalog";
 import { PromoList } from "@/components/promo/PromoList";
+import { DataUnavailable } from "@/components/shared/DataUnavailable";
 import { RestaurantsSection } from "@/components/shared/RestaurantsSection";
 import { CarouselArrow } from "@/components/ui/CarouselArrow";
-import { getPromos, parseCategory } from "@/lib/catalog";
+import { getCategories, getProducts, getPromos } from "@/lib/catalog";
+import { parseCategory, withAllCategory } from "@/lib/catalog-utils";
 
 export const metadata: Metadata = {
   title: "Меню и акции — I love Sushi",
@@ -22,7 +25,24 @@ async function CatalogResults({
   searchParams: Promise<{ category?: string | string[] }>;
 }) {
   const { category } = await searchParams;
-  return <ProductCatalog category={parseCategory(category)} />;
+
+  let catalog;
+  try {
+    // Список категорий — из API: новые категории появляются без изменения кода.
+    // Неизвестный slug в URL превращается в «Всё» и в API не отправляется.
+    const categories = withAllCategory(await getCategories());
+    const active = parseCategory(category, categories);
+    catalog = { categories, active, products: await getProducts(active) };
+  } catch (error) {
+    unstable_rethrow(error);
+    return (
+      <Container className="mt-10 md:mt-[100px]">
+        <DataUnavailable subject="меню" />
+      </Container>
+    );
+  }
+
+  return <ProductCatalog {...catalog} />;
 }
 
 export default function CatalogPage({
@@ -42,7 +62,8 @@ export default function CatalogPage({
         />
       </Container>
 
-      <Suspense fallback={<ProductCatalog />}>
+      {/* Заглушка статична и не запрашивает данные: API вызывается один раз, из CatalogResults */}
+      <Suspense fallback={<ProductCatalogSkeleton />}>
         <CatalogResults searchParams={searchParams} />
       </Suspense>
 

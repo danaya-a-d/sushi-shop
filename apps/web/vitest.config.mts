@@ -4,7 +4,11 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   resolve: {
     // Тот же алиас, что в tsconfig.json: "@/*" → корень apps/web
-    alias: { "@": fileURLToPath(new URL("./", import.meta.url)) },
+    alias: {
+      "@": fileURLToPath(new URL("./", import.meta.url)),
+      // Пакет "server-only" бросает ошибку вне Next.js; в тестах он не нужен
+      "server-only": fileURLToPath(new URL("./test-utils/server-only.ts", import.meta.url)),
+    },
   },
   test: {
     environment: "node",

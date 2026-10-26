@@ -46,8 +46,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {formatWeight(product.weight)}
           </p>
           <AddToCartButton
-            productId={product.id}
-            productName={product.name}
+            product={product}
             label="Купить"
             size="s"
             aria-label={`Купить: ${product.name}`}

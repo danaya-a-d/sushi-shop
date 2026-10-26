@@ -1,24 +1,39 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { Container } from "@/components/layout/Container";
 import { ProductDetails } from "@/components/product/ProductDetails";
-import { ProductCarousel } from "@/components/product/ProductCarousel";
+import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { MediaText } from "@/components/shared/MediaText";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { getProductBySlug, getProducts, getRelatedProducts } from "@/lib/catalog";
+import { getProductBySlug, getProducts } from "@/lib/catalog";
 
-// Страницы собираются заранее для моковых товаров; позже список придёт из API.
-export function generateStaticParams() {
-  return getProducts().map((product) => ({ slug: product.slug }));
+// Cache Components требует хотя бы один путь из generateStaticParams. Если при сборке API недоступен,
+// отдаём служебный slug: его страница сразу отвечает 404 без обращения к API, а настоящие товары
+// рендерятся при первом запросе.
+const BUILD_PLACEHOLDER_SLUG = "__build-placeholder__";
+
+// Страницы собираются заранее для товаров из API; остальные slug рендерятся по запросу.
+export async function generateStaticParams() {
+  try {
+    const products = await getProducts();
+    return products.map((product) => ({ slug: product.slug }));
+  } catch (error) {
+    // Сборка не должна зависеть от работающего API: без списка страницы товаров просто
+    // не собираются заранее, а рендерятся при первом запросе. Это не подмена данных.
+    console.warn("generateStaticParams: каталог недоступен, страницы товаров не будут собраны заранее.", error);
+    return [{ slug: BUILD_PLACEHOLDER_SLUG }];
+  }
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/products/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  if (slug === BUILD_PLACEHOLDER_SLUG) return {};
+  const product = await getProductBySlug(slug);
   if (!product) return {};
 
   return {
@@ -31,7 +46,8 @@ export default async function ProductPage({
   params,
 }: PageProps<"/products/[slug]">) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  if (slug === BUILD_PLACEHOLDER_SLUG) notFound();
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
   return (
@@ -51,12 +67,9 @@ export default async function ProductPage({
       </Container>
 
       <Container className="mt-20 md:mt-[100px] lg:mt-[120px]">
-        <ProductCarousel
-          id="related-products"
-          products={getRelatedProducts(product)}
-          className="[--head-gap:40px] md:[--head-gap:60px]"
-          heading={<SectionTitle>Может понравиться</SectionTitle>}
-        />
+        <Suspense fallback={null}>
+          <RelatedProducts product={product} />
+        </Suspense>
       </Container>
 
       <Container as="section" className="mt-10 md:mt-[60px] lg:mt-[80px]">

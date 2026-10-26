@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 import { RecommendedProducts } from "@/components/checkout/RecommendedProducts";
 import { Container } from "@/components/layout/Container";
@@ -20,7 +21,13 @@ export default function CheckoutPage() {
         <SectionTitle as="h1" className="max-md:text-[28px]">Оформление заказа</SectionTitle>
 
         <div className="mt-[60px] md:mt-[76px] lg:mt-[100px]">
-          <CheckoutForm recommended={<RecommendedProducts />} />
+          <CheckoutForm
+            recommended={
+              <Suspense fallback={null}>
+                <RecommendedProducts />
+              </Suspense>
+            }
+          />
         </div>
       </Container>
     </main>

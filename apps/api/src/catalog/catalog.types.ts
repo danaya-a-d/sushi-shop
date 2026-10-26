@@ -33,3 +33,15 @@ export type ProductResponse = {
   nutrition: NutritionResponse | null;
   image: { src: string; width: number; height: number };
 };
+
+/**
+ * Ответ `GET /products/by-ids` для корзины. Каждый запрошенный id попадает ровно в один список:
+ * - `available` — активные товары (полные данные, в порядке запроса);
+ * - `unavailable` — товар есть, но отключён (isActive = false): отдаётся только id, без данных;
+ * - `missing` — товара с таким id нет.
+ */
+export type ProductsByIdsResponse = {
+  available: ProductResponse[];
+  unavailable: string[];
+  missing: string[];
+};

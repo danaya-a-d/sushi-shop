@@ -2,12 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { CartItem } from "@/components/cart/CartItem";
+import { CartLineItem } from "@/components/cart/CartLineItem";
 import { useCartDrawer } from "@/components/cart/CartDrawerProvider";
 import { useCart } from "@/components/cart/CartProvider";
+import { CartStatusNotice } from "@/components/cart/CartStatusNotice";
 import { Button } from "@/components/ui/Button";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { getProductById } from "@/lib/catalog";
 import { formatPrice } from "@/lib/format-price";
 
 const TITLE_ID = "cart-drawer-title";
@@ -20,7 +20,19 @@ const TITLE_ID = "cart-drawer-title";
  */
 export function CartDrawer() {
   const { isOpen, close } = useCartDrawer();
-  const { items, total, isReady, increment, decrement, remove } = useCart();
+  const {
+    lines,
+    total,
+    totalReliable,
+    status,
+    hasUnavailable,
+    canCheckout,
+    isReady,
+    increment,
+    decrement,
+    remove,
+    refresh,
+  } = useCart();
   const pathname = usePathname();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -36,6 +48,12 @@ export function CartDrawer() {
     else if (!isOpen && dialog.open) dialog.close();
   }, [isOpen]);
 
+  // При каждом открытии корзины цены и наличие перепроверяются одним пакетным запросом
+  // (если такой запрос уже идёт, повторный не создаётся)
+  useEffect(() => {
+    if (isOpen) refresh();
+  }, [isOpen, refresh]);
+
   // Переход на другую страницу закрывает корзину
   useEffect(() => {
     close();
@@ -43,21 +61,19 @@ export function CartDrawer() {
 
   // Позицию, на которой стоял фокус, удалили вместе с кнопкой: фокус не должен
   // «упасть» на body. Переносим на «Закрыть» (безопаснее, чем на чужую кнопку удаления).
-  const lines = items.length;
-  const previousLines = useRef(lines);
+  const lineCount = lines.length;
+  const previousLines = useRef(lineCount);
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (dialog?.open && lines < previousLines.current) {
+    if (dialog?.open && lineCount < previousLines.current) {
       if (!dialog.contains(document.activeElement)) closeButtonRef.current?.focus();
     }
-    previousLines.current = lines;
-  }, [lines]);
+    previousLines.current = lineCount;
+  }, [lineCount]);
 
-  const entries = items.flatMap((item) => {
-    const product = getProductById(item.productId);
-    return product ? [{ product, quantity: item.quantity }] : [];
-  });
-  const isEmpty = isReady && entries.length === 0;
+  // «Корзина пуста» только когда корзина восстановлена и позиций действительно нет:
+  // пока данные товаров загружаются, позиции в списке есть (с заглушками)
+  const isEmpty = isReady && lines.length === 0;
 
   return (
     <dialog
@@ -98,7 +114,7 @@ export function CartDrawer() {
         </div>
 
         <div
-          aria-busy={!isReady}
+          aria-busy={status === "restoring" || status === "loading"}
           className="mt-[38px] min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 md:mt-[60px] lg:px-10 xl:px-[60px]"
         >
           {isEmpty && (
@@ -115,23 +131,30 @@ export function CartDrawer() {
             </div>
           )}
 
-          {isReady && entries.length > 0 && (
-            <ul className="flex flex-col gap-5 pb-5 md:gap-[30px]">
-              {entries.map(({ product, quantity }) => (
-                <CartItem
-                  key={product.id}
-                  product={product}
-                  quantity={quantity}
-                  onIncrement={() => increment(product.id)}
-                  onDecrement={() => decrement(product.id)}
-                  onRemove={() => remove(product.id)}
-                />
-              ))}
-            </ul>
+          {isReady && lines.length > 0 && (
+            <>
+              <CartStatusNotice
+                status={status}
+                hasUnavailable={hasUnavailable}
+                onRetry={refresh}
+                className="mb-5 md:mb-[30px]"
+              />
+              <ul className="flex flex-col gap-5 pb-5 md:gap-[30px]">
+                {lines.map((line) => (
+                  <CartLineItem
+                    key={line.productId}
+                    line={line}
+                    onIncrement={() => increment(line.productId)}
+                    onDecrement={() => decrement(line.productId)}
+                    onRemove={() => remove(line.productId)}
+                  />
+                ))}
+              </ul>
+            </>
           )}
         </div>
 
-        {entries.length > 0 && (
+        {isReady && lines.length > 0 && (
           <div className="shrink-0 border-t border-accent px-5 pt-5 pb-[max(20px,env(safe-area-inset-bottom))] md:pt-8 md:pb-[max(32px,env(safe-area-inset-bottom))] lg:px-10 xl:px-[60px]">
             <SectionTitle as="h2">
               Итого:
@@ -163,11 +186,11 @@ export function CartDrawer() {
 
             <div className="mt-5 flex items-center justify-between gap-4 md:mt-6">
               <p className="text-xl font-medium whitespace-nowrap md:text-4xl">
-                {isReady ? formatPrice(total) : ""}
+                {totalReliable ? formatPrice(total) : ""}
               </p>
-              {/* Пока корзина не восстановлена, вместо ссылки неактивная кнопка.
+              {/* Пока данные не проверены (или есть недоступные товары), вместо ссылки неактивная кнопка.
                   onClick={close}: на самой /checkout путь не меняется, и корзина сама не закроется */}
-              {isReady ? (
+              {canCheckout ? (
                 <Button href="/checkout" onClick={close}>
                   Оформить заказ
                 </Button>

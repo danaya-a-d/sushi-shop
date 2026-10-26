@@ -56,8 +56,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
             {formatPrice(product.price)}
           </p>
           <AddToCartButton
-            productId={product.id}
-            productName={product.name}
+            product={product}
             label="В корзину"
             className="w-full md:w-auto lg:max-xl:w-full"
           />

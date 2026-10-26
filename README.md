@@ -89,6 +89,13 @@ Install dependencies:
 pnpm install
 ```
 
+The frontend takes all catalog data from the NestJS API, so the backend and PostgreSQL must be running
+(`pnpm db:up`, then `pnpm dev`). Before the first run copy the env examples:
+
+- root `.env.example` → `.env` (database, API, `WEB_ORIGINS` — the frontend origin allowed by CORS);
+- `apps/web/.env.example` → `apps/web/.env.local` (`API_URL` for server requests, `NEXT_PUBLIC_API_URL` for
+  the browser cart; the public one ends up in the client bundle, so never put secrets in it).
+
 Run frontend and backend in development mode:
 
 ```bash

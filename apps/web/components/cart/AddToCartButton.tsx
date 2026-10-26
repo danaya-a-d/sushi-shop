@@ -5,10 +5,11 @@ import { useCart } from "@/components/cart/CartProvider";
 import { Button } from "@/components/ui/Button";
 import { QuantityControl, controlMinWidth } from "@/components/ui/QuantityControl";
 import { MAX_QUANTITY } from "@/lib/cart";
+import type { Product } from "@/types/product";
 
 type AddToCartButtonProps = {
-  productId: string;
-  productName: string;
+  /** Товар целиком: корзина сразу покажет его цену и проверит актуальность позже */
+  product: Product;
   /** Текст кнопки, пока товара в корзине нет: «Купить», «В корзину» */
   label: string;
   size?: "l" | "s";
@@ -26,13 +27,13 @@ type AddToCartButtonProps = {
  * заблокированная кнопка: на сервере и при первом клиентском рендере так же.
  */
 export function AddToCartButton({
-  productId,
-  productName,
+  product,
   label,
   size = "l", // как у Button по умолчанию
   className = "",
   "aria-label": ariaLabel,
 }: AddToCartButtonProps) {
+  const { id: productId, name: productName } = product;
   const { items, isReady, add, increment, decrement } = useCart();
   const quantity = items.find((item) => item.productId === productId)?.quantity ?? 0;
 
@@ -64,7 +65,7 @@ export function AddToCartButton({
           aria-label={ariaLabel}
           onClick={() => {
             focusAfterSwap.current = "increment";
-            add(productId);
+            add(productId, product);
           }}
         >
           {label}

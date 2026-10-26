@@ -10,7 +10,11 @@ import {
   toCategoryResponse,
   toProductResponse,
 } from './catalog.mapper.js';
-import type { CategoryResponse, ProductResponse } from './catalog.types.js';
+import type {
+  CategoryResponse,
+  ProductResponse,
+  ProductsByIdsResponse,
+} from './catalog.types.js';
 
 /**
  * Чтение каталога. Публичны только активные товары (isActive = true).
@@ -65,5 +69,33 @@ export class CatalogService {
       throw new NotFoundException(`Product "${slug}" not found`);
     }
     return toProductResponse(row);
+  }
+
+  /**
+   * Пакетная выборка для корзины: один запрос к БД на весь набор id (не по запросу на товар).
+   * @param ids уникальные, уже проверенные id (см. parseProductIds)
+   */
+  async getProductsByIds(
+    ids: readonly string[],
+  ): Promise<ProductsByIdsResponse> {
+    const rows = await this.prisma.client.product.findMany({
+      where: { id: { in: [...ids] } },
+      // isActive нужен только для разбора на группы, наружу он не выходит
+      select: { ...productSelect, isActive: true },
+    });
+    const byId = new Map(rows.map((row) => [row.id, row]));
+
+    const result: ProductsByIdsResponse = {
+      available: [],
+      unavailable: [],
+      missing: [],
+    };
+    for (const id of ids) {
+      const row = byId.get(id);
+      if (!row) result.missing.push(id);
+      else if (!row.isActive) result.unavailable.push(id);
+      else result.available.push(toProductResponse(row));
+    }
+    return result;
   }
 }

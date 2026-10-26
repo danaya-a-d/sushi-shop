@@ -136,6 +136,98 @@ describe('Catalog API (e2e)', () => {
     });
   });
 
+  describe('GET /products/by-ids', () => {
+    it('возвращает активные товары в порядке запроса с полным контрактом', async () => {
+      const { body } = await get('/products/by-ids?ids=3,1').expect(200);
+
+      expect(ids(body.available)).toEqual(['3', '1']);
+      expect(body.unavailable).toEqual([]);
+      expect(body.missing).toEqual([]);
+      expect(body.available[1]).toEqual(
+        (await get('/products/baked-crab').expect(200)).body,
+      );
+    });
+
+    it('разделяет доступные, отключённые и отсутствующие id', async () => {
+      const { body } = await get(
+        `/products/by-ids?ids=1,${INACTIVE_PRODUCT.id},no-such,2`,
+      ).expect(200);
+
+      expect(ids(body.available)).toEqual(['1', '2']);
+      expect(body.unavailable).toEqual([INACTIVE_PRODUCT.id]);
+      expect(body.missing).toEqual(['no-such']);
+    });
+
+    it('про отключённый товар отдаёт только id, без данных', async () => {
+      const { body } = await get(
+        `/products/by-ids?ids=${INACTIVE_PRODUCT.id}`,
+      ).expect(200);
+
+      expect(body.available).toEqual([]);
+      expect(JSON.stringify(body)).not.toContain('Неактивный ролл');
+      expect(JSON.stringify(body)).not.toContain(INACTIVE_PRODUCT.slug);
+    });
+
+    it('дубликаты id схлопываются', async () => {
+      const { body } = await get('/products/by-ids?ids=1,1,2,1').expect(200);
+      expect(ids(body.available)).toEqual(['1', '2']);
+    });
+
+    it('не путается с GET /products/:slug', async () => {
+      const { body } = await get('/products/by-ids?ids=1').expect(200);
+      expect(body).toHaveProperty('available');
+      await get('/products/by-ids').expect(400);
+    });
+
+    it('делает один запрос к БД на весь набор id', async () => {
+      const spy = vi.spyOn(prisma.client.product, 'findMany');
+      try {
+        await get('/products/by-ids?ids=1,2,3,4,5,6,7,8').expect(200);
+        expect(spy).toHaveBeenCalledTimes(1);
+      } finally {
+        spy.mockRestore();
+      }
+    });
+
+    it.each([
+      ['без ids', '/products/by-ids'],
+      ['пустой ids', '/products/by-ids?ids='],
+      ['повторный ids', '/products/by-ids?ids=1&ids=2'],
+      ['пустой элемент', '/products/by-ids?ids=1,,2'],
+      ['недопустимые символы', '/products/by-ids?ids=1,%27%3B--'],
+      [
+        'больше 50 id',
+        `/products/by-ids?ids=${Array.from({ length: 51 }, (_, i) => i + 1).join(',')}`,
+      ],
+    ])('400: %s', async (_name, url) => {
+      await get(url).expect(400);
+    });
+
+    it('ровно 50 id допустимы', async () => {
+      const list = Array.from({ length: 50 }, (_, i) => i + 1).join(',');
+      const { body } = await get(`/products/by-ids?ids=${list}`).expect(200);
+      expect(body.available).toHaveLength(8);
+      expect(body.missing).toHaveLength(42);
+    });
+
+    it('товар, отключённый через isActive, переходит в unavailable', async () => {
+      await prisma.client.product.update({
+        where: { id: '1' },
+        data: { isActive: false },
+      });
+      try {
+        const { body } = await get('/products/by-ids?ids=1,2').expect(200);
+        expect(ids(body.available)).toEqual(['2']);
+        expect(body.unavailable).toEqual(['1']);
+      } finally {
+        await prisma.client.product.update({
+          where: { id: '1' },
+          data: { isActive: true },
+        });
+      }
+    });
+  });
+
   describe('isActive', () => {
     it('отключённый товар исчезает из списка, категории и страницы товара, включённый возвращается', async () => {
       await prisma.client.product.update({

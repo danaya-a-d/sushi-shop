@@ -1,17 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { emptyCart } from "@/lib/cart";
 import { CART_STORAGE_KEY, type CartStorage, loadCart, saveCart } from "@/lib/cart-storage";
-
-vi.mock("@/lib/catalog", () => {
-  const testProducts = [
-    { id: "test-a", price: 100 },
-    { id: "test-b", price: 250 },
-  ];
-  return {
-    getProductById: (id: string) =>
-      testProducts.find((product) => product.id === id),
-  };
-});
 
 /** Простое хранилище в памяти вместо localStorage. */
 function fakeStorage(initial: Record<string, string> = {}) {
@@ -48,15 +37,21 @@ describe("loadCart", () => {
     },
   );
 
-  it("отбрасывает неизвестные товары и неверное количество (через sanitizeCart)", () => {
+  it("отбрасывает неверное количество и id, но сохраняет товары, которых больше нет в каталоге", () => {
     const storage = withCart({
       items: [
         { productId: "gone", quantity: 1 },
         { productId: "test-a", quantity: 0 },
+        { productId: "bad id!", quantity: 1 },
         { productId: "test-b", quantity: 3 },
       ],
     });
-    expect(loadCart(storage)).toEqual({ items: [{ productId: "test-b", quantity: 3 }] });
+    expect(loadCart(storage)).toEqual({
+      items: [
+        { productId: "gone", quantity: 1 },
+        { productId: "test-b", quantity: 3 },
+      ],
+    });
   });
 
   it("ошибка чтения — пустая корзина", () => {

@@ -6,7 +6,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { CatalogService } from './catalog.service.js';
-import type { ProductResponse } from './catalog.types.js';
+import type {
+  ProductResponse,
+  ProductsByIdsResponse,
+} from './catalog.types.js';
+import { parseProductIds } from './parse-product-ids.js';
 
 @Controller('products')
 export class ProductsController {
@@ -23,6 +27,18 @@ export class ProductsController {
       );
     }
     return this.catalog.listProducts(category);
+  }
+
+  /**
+   * GET /products/by-ids?ids=1,2,3 — пакетная выборка для корзины.
+   * Объявлен ВЫШЕ `:slug`, иначе "by-ids" был бы принят за slug товара
+   * (поэтому товар со slug "by-ids" по `/products/:slug` недоступен).
+   */
+  @Get('by-ids')
+  getByIds(
+    @Query('ids') ids?: string | string[],
+  ): Promise<ProductsByIdsResponse> {
+    return this.catalog.getProductsByIds(parseProductIds(ids));
   }
 
   /** GET /products/:slug */

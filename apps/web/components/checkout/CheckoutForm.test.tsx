@@ -1,16 +1,18 @@
 // @vitest-environment jsdom
 import "@testing-library/jest-dom/vitest";
-import { cleanup, render, screen, within } from "@testing-library/react";
+import { act, cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CART_STORAGE_KEY } from "@/lib/cart-storage";
 import { formatPrice } from "@/lib/format-price";
+import type { ProductsByIds } from "@/lib/api/browser";
+import { createFakeCatalog, deferred, makeProduct } from "@/test-utils/fixtures";
 import { CheckoutForm } from "./CheckoutForm";
 
 const SUCCESS_NOTICE = /Форма заполнена корректно/;
 
-// В моковом каталоге у товаров "1" и "2" цена 1250 грн
+// У товаров "1" и "2" в управляемом ответе API цена 1250 грн
 const twoItems = [
   { productId: "1", quantity: 1 },
   { productId: "2", quantity: 1 },
@@ -20,20 +22,23 @@ function seedCart(items: { productId: string; quantity: number }[]) {
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify({ items }));
 }
 
+let catalog = createFakeCatalog();
+
 function renderCheckout() {
   const user = userEvent.setup();
   render(
-    <CartProvider>
+    <CartProvider fetchProducts={catalog.fetchProducts}>
       <CheckoutForm recommended={<p>Рекомендации</p>} />
     </CartProvider>,
   );
   return user;
 }
 
-/** Ждёт, пока корзина восстановится из localStorage и появится форма. */
+/** Ждёт, пока корзина восстановится из localStorage, товары проверит API и кнопка станет доступна. */
 async function renderForm() {
   const user = renderCheckout();
   await screen.findByRole("button", { name: "Оформить заказ" });
+  await waitFor(() => expect(submit()).toBeEnabled());
   return user;
 }
 
@@ -62,6 +67,10 @@ async function fillAddress(user: ReturnType<typeof userEvent.setup>) {
 
 beforeEach(() => {
   localStorage.clear();
+  catalog = createFakeCatalog([
+    makeProduct("1", { name: "Запеченный краб" }),
+    makeProduct("2", { name: "Радуга" }),
+  ]);
 });
 
 afterEach(() => {
@@ -296,5 +305,98 @@ describe("CheckoutForm: недоступные возможности", () => {
     expect(radio(/Картой при получении/)).toBeChecked();
     expect(screen.getByRole("textbox", { name: "Промокод" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Применить" })).toBeDisabled();
+  });
+});
+
+describe("CheckoutForm: данные товаров из API", () => {
+  it("пока товары загружаются, не показывает «Корзина пуста» и форму, сумма не выводится", async () => {
+    const pending = deferred<ProductsByIds>();
+    seedCart(twoItems);
+    render(
+      <CartProvider fetchProducts={() => pending.promise}>
+        <CheckoutForm recommended={null} />
+      </CartProvider>,
+    );
+
+    // позиции появляются сразу (заглушки), а не «пустая корзина»
+    expect(await screen.findByRole("heading", { name: "Ваш заказ" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Корзина пуста" })).not.toBeInTheDocument();
+    expect(submit()).toBeDisabled();
+    expect(screen.getByText("Проверяем цены и наличие товаров…")).toBeInTheDocument();
+
+    await act(async () =>
+      pending.resolve({
+        available: [makeProduct("1"), makeProduct("2")],
+        unavailable: [],
+        missing: [],
+      }),
+    );
+    await waitFor(() => expect(submit()).toBeEnabled());
+    expectTotal(2560);
+  });
+
+  it("недоступный товар остаётся в списке, блокирует оформление и убирается кнопкой удаления", async () => {
+    seedCart(twoItems);
+    catalog.deactivate("2");
+    const user = renderCheckout();
+    await screen.findByText("Товар временно недоступен");
+
+    expect(screen.getByRole("alert")).toHaveTextContent(/больше недоступны/);
+    expect(submit()).toBeDisabled();
+    expect(localStorage.getItem(CART_STORAGE_KEY)).toContain('"productId":"2"');
+
+    await user.click(screen.getByRole("button", { name: /Удалить из корзины: товар временно недоступен/ }));
+
+    await waitFor(() => expect(submit()).toBeEnabled());
+    expect(screen.queryByText("Товар временно недоступен")).not.toBeInTheDocument();
+    expectTotal(1310);
+  });
+
+  it("удалённый из меню товар помечается отдельным текстом", async () => {
+    seedCart(twoItems);
+    catalog.remove("1");
+    renderCheckout();
+
+    expect(await screen.findByText("Товар удалён из меню")).toBeInTheDocument();
+    expect(submit()).toBeDisabled();
+  });
+
+  it("ошибка API: сообщение с повтором, корзина сохранена, оформление закрыто; после повтора доступно", async () => {
+    seedCart(twoItems);
+    catalog.failNext();
+    const user = renderCheckout();
+
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent(/Не удалось проверить цены/);
+    expect(submit()).toBeDisabled();
+    expect(localStorage.getItem(CART_STORAGE_KEY)).toContain('"productId":"1"');
+    expect(screen.queryByRole("heading", { name: "Корзина пуста" })).not.toBeInTheDocument();
+
+    await user.click(within(alert).getByRole("button", { name: "Повторить" }));
+
+    await waitFor(() => expect(submit()).toBeEnabled());
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expectTotal(2560);
+  });
+
+  it("при открытии checkout перепроверяет актуальную цену", async () => {
+    seedCart(twoItems);
+    catalog.setProduct(makeProduct("2", { name: "Радуга", price: 1000 }));
+    await renderForm();
+
+    expectTotal(2310);
+  });
+
+  it("не отправляет форму при недоступных позициях даже при корректных данных", async () => {
+    seedCart(twoItems);
+    catalog.deactivate("2");
+    const user = renderCheckout();
+    await screen.findByText("Товар временно недоступен");
+
+    await fillContacts(user);
+    await fillAddress(user);
+    await user.click(submit());
+
+    expect(screen.queryByText(SUCCESS_NOTICE)).not.toBeInTheDocument();
   });
 });
