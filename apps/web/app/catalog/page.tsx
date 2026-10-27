@@ -7,7 +7,7 @@ import { PromoList } from "@/components/promo/PromoList";
 import { DataUnavailable } from "@/components/shared/DataUnavailable";
 import { RestaurantsSection } from "@/components/shared/RestaurantsSection";
 import { CarouselArrow } from "@/components/ui/CarouselArrow";
-import { getCategories, getProducts, getPromos } from "@/lib/catalog";
+import { getCategories, getProductsPage, getPromos } from "@/lib/catalog";
 import { parseCategory, withAllCategory } from "@/lib/catalog-utils";
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ async function CatalogResults({
     // Неизвестный slug в URL превращается в «Всё» и в API не отправляется.
     const categories = withAllCategory(await getCategories());
     const active = parseCategory(category, categories);
-    catalog = { categories, active, products: await getProducts(active) };
+    catalog = { categories, active, page: await getProductsPage({ category: active }) };
   } catch (error) {
     unstable_rethrow(error);
     return (

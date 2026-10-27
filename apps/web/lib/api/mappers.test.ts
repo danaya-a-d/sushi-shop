@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { makeApiProduct } from "@/test-utils/fixtures";
-import { toCategory, toProduct } from "./mappers";
+import { toCategory, toProduct, toProductsPage } from "./mappers";
 
 describe("toProduct", () => {
   it("переводит копейки в гривны в одном месте", () => {
@@ -44,5 +44,20 @@ describe("toCategory", () => {
       slug: "rolls",
       label: "Роллы",
     });
+  });
+});
+
+describe("toProductsPage", () => {
+  it("переводит товары страницы и сохраняет курсор", () => {
+    const page = toProductsPage({
+      items: [makeApiProduct("1", { priceKopecks: 50000 })],
+      nextCursor: "abc",
+    });
+    expect(page.items[0].price).toBe(500);
+    expect(page.nextCursor).toBe("abc");
+  });
+
+  it("конец списка: nextCursor = null", () => {
+    expect(toProductsPage({ items: [], nextCursor: null })).toEqual({ items: [], nextCursor: null });
   });
 });

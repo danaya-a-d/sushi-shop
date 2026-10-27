@@ -23,7 +23,7 @@ export function CartDrawer() {
   const {
     lines,
     total,
-    totalReliable,
+    totalKnown,
     status,
     hasUnavailable,
     canCheckout,
@@ -186,7 +186,7 @@ export function CartDrawer() {
 
             <div className="mt-5 flex items-center justify-between gap-4 md:mt-6">
               <p className="text-xl font-medium whitespace-nowrap md:text-4xl">
-                {totalReliable ? formatPrice(total) : ""}
+                {totalKnown ? formatPrice(total) : ""}
               </p>
               {/* Пока данные не проверены (или есть недоступные товары), вместо ссылки неактивная кнопка.
                   onClick={close}: на самой /checkout путь не меняется, и корзина сама не закроется */}

@@ -1,7 +1,7 @@
 import { kopecksToUah } from "@/lib/money";
 import type { Category } from "@/types/category";
-import type { Product } from "@/types/product";
-import type { ApiCategory, ApiProduct } from "./types";
+import type { Product, ProductsPage } from "@/types/product";
+import type { ApiCategory, ApiProduct, ApiProductsPage } from "./types";
 
 /** API → frontend Product: единственное место перевода копеек в гривны и переименования полей. */
 export function toProduct(api: ApiProduct): Product {
@@ -21,4 +21,8 @@ export function toProduct(api: ApiProduct): Product {
 
 export function toCategory(api: ApiCategory): Category {
   return { slug: api.slug, label: api.label };
+}
+
+export function toProductsPage(api: ApiProductsPage): ProductsPage {
+  return { items: api.items.map(toProduct), nextCursor: api.nextCursor };
 }

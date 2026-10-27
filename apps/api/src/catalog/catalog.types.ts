@@ -45,3 +45,12 @@ export type ProductsByIdsResponse = {
   unavailable: string[];
   missing: string[];
 };
+
+/**
+ * Ответ `GET /products`: страница каталога.
+ * `nextCursor` — непрозрачный курсор следующей страницы или null, если товары закончились.
+ */
+export type ProductsPageResponse = {
+  items: ProductResponse[];
+  nextCursor: string | null;
+};

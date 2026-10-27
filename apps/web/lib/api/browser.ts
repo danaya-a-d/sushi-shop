@@ -1,7 +1,8 @@
-import type { Product } from "@/types/product";
+import type { Product, ProductsPage } from "@/types/product";
 import { getJson, normalizeBaseUrl } from "./http";
-import { toProduct } from "./mappers";
-import { apiProductsByIdsSchema } from "./types";
+import { toProduct, toProductsPage } from "./mappers";
+import { CATALOG_PAGE_SIZE, type ProductsQuery, productsPath } from "./paths";
+import { apiProductsByIdsSchema, apiProductsPageSchema } from "./types";
 
 // Браузерный клиент (используется CartProvider). Ходит в NestJS напрямую по публичному адресу
 // NEXT_PUBLIC_API_URL; сервер должен разрешать origin сайта через CORS (WEB_ORIGINS в API).
@@ -72,3 +73,25 @@ export function createFetchProductsByIds(options?: {
 
 export const fetchProductsByIds: FetchProductsByIds = (ids) =>
   createFetchProductsByIds()(ids);
+
+export type FetchProductsPage = (
+  query: ProductsQuery & { signal?: AbortSignal },
+) => Promise<ProductsPage>;
+
+/** Следующие страницы каталога для кнопки «Показать ещё» (первая страница приходит с сервера). */
+export function createFetchProductsPage(options?: {
+  baseUrl?: string;
+  fetchImpl?: typeof fetch;
+}): FetchProductsPage {
+  return async ({ signal, ...query }) => {
+    const data = await getJson(apiProductsPageSchema, {
+      baseUrl: options?.baseUrl ?? getBrowserApiUrl(),
+      path: productsPath({ limit: CATALOG_PAGE_SIZE, ...query }),
+      init: { cache: "no-store", signal },
+      fetchImpl: options?.fetchImpl,
+    });
+    return toProductsPage(data);
+  };
+}
+
+export const fetchProductsPage: FetchProductsPage = (query) => createFetchProductsPage()(query);

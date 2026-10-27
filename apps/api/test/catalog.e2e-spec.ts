@@ -61,14 +61,16 @@ describe('Catalog API (e2e)', () => {
     it('возвращает только активные товары в стабильном порядке', async () => {
       const { body } = await get('/products').expect(200);
 
-      expect(ids(body)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8']);
-      expect(ids(body)).not.toContain(INACTIVE_PRODUCT.id);
+      expect(ids(body.items)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8']);
+      expect(ids(body.items)).not.toContain(INACTIVE_PRODUCT.id);
+      expect(body.nextCursor).toBeNull();
     });
 
     it('отдаёт явный контракт: цена в копейках с валютой и без служебных полей', async () => {
       const { body } = await get('/products').expect(200);
 
-      expect(body[0]).toEqual({
+      expect(Object.keys(body)).toEqual(['items', 'nextCursor']);
+      expect(body.items[0]).toEqual({
         id: '1',
         slug: 'baked-crab',
         name: 'Запеченный краб',
@@ -85,22 +87,22 @@ describe('Catalog API (e2e)', () => {
 
     it('?category=rolls возвращает все роллы', async () => {
       const { body } = await get('/products?category=rolls').expect(200);
-      expect(ids(body)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8']);
+      expect(ids(body.items)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8']);
     });
 
     it('?category=hits возвращает «Хиты продаж»', async () => {
       const { body } = await get('/products?category=hits').expect(200);
-      expect(ids(body)).toEqual(['1', '2', '3', '4']);
+      expect(ids(body.items)).toEqual(['1', '2', '3', '4']);
     });
 
     it('?category=new возвращает новинки', async () => {
       const { body } = await get('/products?category=new').expect(200);
-      expect(ids(body)).toEqual(['5', '6', '7', '8']);
+      expect(ids(body.items)).toEqual(['5', '6', '7', '8']);
     });
 
     it('существующая категория без товаров даёт пустой список', async () => {
       const { body } = await get('/products?category=sushi').expect(200);
-      expect(body).toEqual([]);
+      expect(body).toEqual({ items: [], nextCursor: null });
     });
 
     it.each(['unknown', 'all', '', 'ROLLS'])(
@@ -235,9 +237,9 @@ describe('Catalog API (e2e)', () => {
         data: { isActive: false },
       });
       try {
-        expect(ids((await get('/products').expect(200)).body)).not.toContain('1');
+        expect(ids((await get('/products').expect(200)).body.items)).not.toContain('1');
         expect(
-          ids((await get('/products?category=hits').expect(200)).body),
+          ids((await get('/products?category=hits').expect(200)).body.items),
         ).toEqual(['2', '3', '4']);
         await get('/products/baked-crab').expect(404);
       } finally {
@@ -248,7 +250,7 @@ describe('Catalog API (e2e)', () => {
       }
 
       await get('/products/baked-crab').expect(200);
-      expect(ids((await get('/products').expect(200)).body)).toContain('1');
+      expect(ids((await get('/products').expect(200)).body.items)).toContain('1');
     });
   });
 
@@ -260,7 +262,7 @@ describe('Catalog API (e2e)', () => {
       });
       try {
         const { body } = await get('/products').expect(200);
-        expect(ids(body)[0]).toBe('8');
+        expect(ids(body.items)[0]).toBe('8');
       } finally {
         await prisma.client.product.update({
           where: { id: '8' },

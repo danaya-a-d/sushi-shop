@@ -3,7 +3,7 @@ import "@testing-library/jest-dom/vitest";
 import { act, cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CartProvider } from "@/components/cart/CartProvider";
+import { CartProvider, useCart } from "@/components/cart/CartProvider";
 import { CART_STORAGE_KEY } from "@/lib/cart-storage";
 import { formatPrice } from "@/lib/format-price";
 import type { ProductsByIds } from "@/lib/api/browser";
@@ -398,5 +398,85 @@ describe("CheckoutForm: данные товаров из API", () => {
     await user.click(submit());
 
     expect(screen.queryByText(SUCCESS_NOTICE)).not.toBeInTheDocument();
+  });
+
+  it("пока идёт повторная проверка цен, кнопка заблокирована и форма не отправляется; после ответа — снова доступна", async () => {
+    seedCart(twoItems);
+    // первый запрос (восстановление) отвечает сразу, второй (перепроверка) ждёт ответа
+    const gates: ReturnType<typeof deferred<ProductsByIds>>[] = [];
+    let gated = false;
+    const fetchProducts = vi.fn(async (ids: readonly string[]) => {
+      if (!gated) return catalog.fetchProducts(ids);
+      const gate = deferred<ProductsByIds>();
+      gates.push(gate);
+      return gate.promise;
+    });
+    const user = userEvent.setup();
+    const RefreshButton = () => {
+      const cart = useCart();
+      return <button onClick={() => cart.refresh()}>перепроверить</button>;
+    };
+    render(
+      <CartProvider fetchProducts={fetchProducts}>
+        <CheckoutForm recommended={null} />
+        <RefreshButton />
+      </CartProvider>,
+    );
+    await waitFor(() => expect(submit()).toBeEnabled());
+    await fillContacts(user);
+    await fillAddress(user);
+
+    gated = true;
+    await user.click(screen.getByRole("button", { name: "перепроверить" }));
+
+    expect(submit()).toBeDisabled();
+    expect(screen.getByText("Проверяем цены и наличие товаров…")).toBeInTheDocument();
+    // последняя известная сумма остаётся на экране
+    expectTotal(2560);
+    await user.click(submit());
+    expect(screen.queryByText(SUCCESS_NOTICE)).not.toBeInTheDocument();
+
+    await act(async () =>
+      gates[0].resolve({
+        available: [makeProduct("1", { name: "Запеченный краб" }), makeProduct("2", { name: "Радуга", price: 1000 })],
+        unavailable: [],
+        missing: [],
+      }),
+    );
+
+    await waitFor(() => expect(submit()).toBeEnabled());
+    expectTotal(2310);
+    await user.click(submit());
+    expect(await screen.findByText(SUCCESS_NOTICE)).toBeInTheDocument();
+  });
+
+  it("ошибка перепроверки блокирует отправку, но корзина и введённые данные сохраняются", async () => {
+    seedCart(twoItems);
+    let fail = false;
+    const fetchProducts = vi.fn(async (ids: readonly string[]) => {
+      if (fail) throw new Error("API недоступен");
+      return catalog.fetchProducts(ids);
+    });
+    const user = userEvent.setup();
+    const RefreshButton = () => {
+      const cart = useCart();
+      return <button onClick={() => cart.refresh()}>перепроверить</button>;
+    };
+    render(
+      <CartProvider fetchProducts={fetchProducts}>
+        <CheckoutForm recommended={null} />
+        <RefreshButton />
+      </CartProvider>,
+    );
+    await waitFor(() => expect(submit()).toBeEnabled());
+    await fillContacts(user);
+
+    fail = true;
+    await user.click(screen.getByRole("button", { name: "перепроверить" }));
+
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(submit()).toBeDisabled();
+    expect(field("Имя и фамилия")).toHaveValue("Иван Петров");
+    expect(JSON.parse(localStorage.getItem(CART_STORAGE_KEY) ?? "null")).toEqual({ items: twoItems });
   });
 });

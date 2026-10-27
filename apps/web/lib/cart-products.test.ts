@@ -174,12 +174,55 @@ describe("selectLines / selectSummary", () => {
     expect(summary(emptyCart, emptyRegistry).canCheckout).toBe(false);
   });
 
-  it("идущая в фоне перепроверка проверенных позиций оформление не блокирует", () => {
-    const registry = run(
+  it("перепроверка: последняя цена остаётся видимой, но оформление закрыто, пока идёт запрос", () => {
+    const c = cart(["a", 2]);
+    const verified = run(emptyRegistry, { type: "response", ids: ["a"], seq: 1, result: answer([A]) });
+    expect(summary(c, verified)).toMatchObject({ status: "ready", canCheckout: true, totalReliable: true });
+
+    const rechecking = run(verified, { type: "request", ids: ["a"] });
+    expect(selectLines(c, rechecking)[0]).toMatchObject({ status: "ok", product: A });
+    expect(summary(c, rechecking)).toMatchObject({
+      status: "loading",
+      canCheckout: false,
+      totalReliable: false,
+      totalKnown: true,
+      total: 200,
+    });
+  });
+
+  it("ready → loading → ready: после ответа оформление снова разрешено, цена обновлена", () => {
+    const c = cart(["a", 1]);
+    const state = run(
       emptyRegistry,
       { type: "response", ids: ["a"], seq: 1, result: answer([A]) },
       { type: "request", ids: ["a"] },
+      { type: "response", ids: ["a"], seq: 2, result: answer([makeProduct("a", { price: 120 })]) },
     );
-    expect(summary(cart(["a", 1]), registry).canCheckout).toBe(true);
+    expect(summary(c, state)).toMatchObject({ status: "ready", canCheckout: true, total: 120 });
+  });
+
+  it("ready → loading → error: данные остаются, оформление закрыто", () => {
+    const c = cart(["a", 1]);
+    const state = run(
+      emptyRegistry,
+      { type: "response", ids: ["a"], seq: 1, result: answer([A]) },
+      { type: "request", ids: ["a"] },
+      { type: "failure", ids: ["a"] },
+    );
+    expect(selectLines(c, state)[0]).toMatchObject({ status: "ok" });
+    expect(summary(c, state)).toMatchObject({ status: "error", canCheckout: false, totalKnown: true });
+  });
+
+  it("перепроверка товара, которого нет в корзине, оформление не блокирует", () => {
+    const state = run(
+      emptyRegistry,
+      { type: "response", ids: ["a", "b"], seq: 1, result: answer([A, B]) },
+      { type: "request", ids: ["b"] }, // b уже удалён из корзины, а ответ ещё не пришёл
+    );
+    expect(summary(cart(["a", 1]), state)).toMatchObject({ status: "ready", canCheckout: true });
+  });
+
+  it("пока данных нет совсем, сумма неизвестна", () => {
+    expect(summary(cart(["a", 1]), emptyRegistry).totalKnown).toBe(false);
   });
 });

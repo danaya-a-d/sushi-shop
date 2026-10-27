@@ -1,6 +1,6 @@
 import { unstable_rethrow } from "next/navigation";
 import { ProductCarousel } from "@/components/product/ProductCarousel";
-import { getFeaturedProducts } from "@/lib/catalog";
+import { getRecommendedProducts } from "@/lib/catalog";
 
 /**
  * «Может понравиться» на checkout: общая карусель товаров с заголовком. Серверный компонент.
@@ -9,7 +9,7 @@ import { getFeaturedProducts } from "@/lib/catalog";
 export async function RecommendedProducts() {
   let products;
   try {
-    products = await getFeaturedProducts();
+    products = await getRecommendedProducts();
   } catch (error) {
     unstable_rethrow(error);
     return null;

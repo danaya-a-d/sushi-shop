@@ -163,7 +163,7 @@ export function selectLines(cart: CartState, registry: ProductRegistry): CartLin
 
 /**
  * - restoring — корзина ещё читается из localStorage;
- * - loading   — данные товаров загружаются или ещё не проверены API;
+ * - loading   — данные товаров загружаются, перепроверяются или ещё не проверены API;
  * - error     — не удалось получить или проверить данные товаров;
  * - ready     — все позиции проверены API.
  */
@@ -175,8 +175,16 @@ export type CartSummary = {
   hasUnavailable: boolean;
   /** Сумма доступных позиций по данным справочника, грн */
   total: number;
-  /** false, пока часть позиций не загружена: сумму нельзя показывать как итоговую */
+  /**
+   * true, только когда все позиции проверены API и сейчас ничего не перепроверяется.
+   * Итоговой (на которую можно полагаться при оформлении) сумма считается именно тогда.
+   */
   totalReliable: boolean;
+  /**
+   * true, когда о каждой позиции есть данные (пусть и устаревшие, пока идёт перепроверка).
+   * Интерфейс показывает сумму по последним известным ценам, чтобы она не мигала.
+   */
+  totalKnown: boolean;
   /** Оформление разрешено: корзина непуста, всё проверено, недоступных позиций нет */
   canCheckout: boolean;
 };
@@ -198,7 +206,14 @@ export function selectSummary(
   else if (lines.some((line) => line.status === "error" || registry.failed[line.productId])) {
     status = "error";
   } else if (
-    lines.some((line) => line.status === "loading" || (line.status === "ok" && !line.verified))
+    lines.some(
+      (line) =>
+        line.status === "loading" ||
+        (line.status === "ok" && !line.verified) ||
+        // Идёт перепроверка: последняя известная цена остаётся на экране, но считается устаревшей,
+        // пока API не ответил. Учитываются только позиции, которые сейчас лежат в корзине.
+        registry.loading[line.productId],
+    )
   ) {
     status = "loading";
   } else status = "ready";
@@ -208,6 +223,7 @@ export function selectSummary(
     hasUnavailable,
     total,
     totalReliable: status === "ready",
+    totalKnown: isReady && lines.every((line) => line.status === "ok" || line.status === "unavailable"),
     canCheckout: status === "ready" && !hasUnavailable && lines.length > 0,
   };
 }

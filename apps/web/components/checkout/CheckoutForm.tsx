@@ -38,7 +38,7 @@ export function CheckoutForm({ recommended }: CheckoutFormProps) {
   const {
     lines,
     total,
-    totalReliable,
+    totalKnown,
     status,
     hasUnavailable,
     canCheckout,
@@ -301,7 +301,7 @@ export function CheckoutForm({ recommended }: CheckoutFormProps) {
 
         <div className="mt-5 flex items-center justify-between gap-4 md:mt-[30px]">
           <p className="text-xl font-medium whitespace-nowrap md:text-4xl">
-            {totalReliable ? formatPrice(orderTotal) : "—"}
+            {totalKnown ? formatPrice(orderTotal) : "—"}
           </p>
           <Button
             type="submit"

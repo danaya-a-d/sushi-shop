@@ -30,3 +30,9 @@ export type Product = {
     height: number;
   };
 };
+
+/** Страница каталога: товары и курсор следующей страницы (null — товары закончились) */
+export type ProductsPage = {
+  items: Product[];
+  nextCursor: string | null;
+};

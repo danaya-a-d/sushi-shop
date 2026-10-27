@@ -18,17 +18,13 @@ export function withAllCategory(categories: readonly Category[]): readonly Categ
   return [{ slug: ALL_CATEGORY, label: "Всё" }, ...categories];
 }
 
-/** Другие товары: сначала с общими категориями, затем остальные (порядок данных сохраняется). */
-export function pickRelatedProducts(
-  product: Product,
-  candidates: readonly Product[],
-  limit = 4,
-): readonly Product[] {
-  const shared = (item: Product) =>
-    item.categories.filter((slug) => product.categories.includes(slug)).length;
-
-  return candidates
-    .filter((item) => item.id !== product.id)
-    .sort((a, b) => shared(b) - shared(a))
-    .slice(0, limit);
+/** Добавляет новую страницу к уже показанным товарам, пропуская те, чей id уже есть (порядок сохраняется). */
+export function appendUnique(current: readonly Product[], next: readonly Product[]): Product[] {
+  const seen = new Set(current.map((product) => product.id));
+  const added = next.filter((product) => {
+    if (seen.has(product.id)) return false;
+    seen.add(product.id);
+    return true;
+  });
+  return added.length === 0 ? [...current] : [...current, ...added];
 }

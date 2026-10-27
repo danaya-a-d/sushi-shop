@@ -44,6 +44,8 @@ type CartContextValue = {
   /** Сумма доступных позиций по данным справочника, грн. Итоговой считается при `totalReliable` */
   total: number;
   totalReliable: boolean;
+  /** Есть данные обо всех позициях (возможно, устаревшие на время перепроверки): сумму можно показать, но не считать итоговой */
+  totalKnown: boolean;
   /**
    * true, когда сохранённая корзина восстановлена. До этого `items` пустой
    * только потому, что данные ещё не прочитаны: не показывайте «Корзина пуста»
@@ -198,6 +200,7 @@ export function CartProvider({ children, fetchProducts = fetchProductsByIds }: C
       count: getCartCount(cart),
       total: summary.total,
       totalReliable: summary.totalReliable,
+      totalKnown: summary.totalKnown,
       isReady,
       status: summary.status,
       hasUnavailable: summary.hasUnavailable,

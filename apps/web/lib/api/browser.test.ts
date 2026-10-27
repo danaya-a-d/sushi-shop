@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { makeApiProduct } from "@/test-utils/fixtures";
-import { MAX_IDS_PER_REQUEST, createFetchProductsByIds } from "./browser";
+import { MAX_IDS_PER_REQUEST, createFetchProductsByIds, createFetchProductsPage } from "./browser";
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -89,5 +89,51 @@ describe("createFetchProductsByIds", () => {
     );
     await createFetchProductsByIds({ baseUrl: "http://api.test", fetchImpl })(["1"]);
     expect(fetchImpl.mock.calls[0][1]).toMatchObject({ cache: "no-store" });
+  });
+});
+
+describe("createFetchProductsPage", () => {
+  const page = (items: unknown[], nextCursor: string | null) => json({ items, nextCursor });
+
+  it("запрашивает следующую страницу с категорией, курсором и размером страницы", async () => {
+    const fetchImpl = vi.fn<typeof fetch>(async () => page([makeApiProduct("13", { priceKopecks: 50000 })], "c2"));
+    const result = await createFetchProductsPage({ baseUrl: "http://api.test", fetchImpl })({
+      category: "rolls",
+      cursor: "c1",
+    });
+
+    expect(String(fetchImpl.mock.calls[0][0])).toBe("http://api.test/products?category=rolls&limit=12&cursor=c1");
+    expect(result.items[0].price).toBe(500);
+    expect(result.nextCursor).toBe("c2");
+  });
+
+  it("«all» не превращается в параметр category", async () => {
+    const fetchImpl = vi.fn<typeof fetch>(async () => page([], null));
+    await createFetchProductsPage({ baseUrl: "http://api.test", fetchImpl })({ category: "all", cursor: "c1" });
+    expect(String(fetchImpl.mock.calls[0][0])).toBe("http://api.test/products?limit=12&cursor=c1");
+  });
+
+  it("передаёт signal и не использует браузерный кэш", async () => {
+    const fetchImpl = vi.fn<typeof fetch>(async () => page([], null));
+    const controller = new AbortController();
+    await createFetchProductsPage({ baseUrl: "http://api.test", fetchImpl })({ signal: controller.signal });
+    expect(fetchImpl.mock.calls[0][1]).toMatchObject({ cache: "no-store", signal: controller.signal });
+  });
+
+  it("ошибки: HTTP 400, сеть, неверный формат — ApiError", async () => {
+    await expect(
+      createFetchProductsPage({ baseUrl: "http://api.test", fetchImpl: async () => json({}, 400) })({}),
+    ).rejects.toMatchObject({ kind: "http", status: 400 });
+    await expect(
+      createFetchProductsPage({
+        baseUrl: "http://api.test",
+        fetchImpl: async () => {
+          throw new TypeError("fetch failed");
+        },
+      })({}),
+    ).rejects.toMatchObject({ kind: "network" });
+    await expect(
+      createFetchProductsPage({ baseUrl: "http://api.test", fetchImpl: async () => json([]) })({}),
+    ).rejects.toMatchObject({ kind: "invalid" });
   });
 });

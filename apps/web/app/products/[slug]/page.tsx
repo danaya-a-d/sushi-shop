@@ -8,18 +8,20 @@ import { MediaText } from "@/components/shared/MediaText";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { getProductBySlug, getProducts } from "@/lib/catalog";
+import { getProductBySlug, getProductSlugsForPrerender } from "@/lib/catalog";
 
 // Cache Components требует хотя бы один путь из generateStaticParams. Если при сборке API недоступен,
 // отдаём служебный slug: его страница сразу отвечает 404 без обращения к API, а настоящие товары
 // рендерятся при первом запросе.
 const BUILD_PLACEHOLDER_SLUG = "__build-placeholder__";
 
-// Страницы собираются заранее для товаров из API; остальные slug рендерятся по запросу.
+// Заранее собирается ограниченная первая выборка товаров (не весь каталог); остальные slug рендерятся
+// по запросу и кэшируются. dynamicParams не отключается: новые товары открываются без пересборки.
 export async function generateStaticParams() {
   try {
-    const products = await getProducts();
-    return products.map((product) => ({ slug: product.slug }));
+    const slugs = await getProductSlugsForPrerender();
+    if (slugs.length === 0) return [{ slug: BUILD_PLACEHOLDER_SLUG }];
+    return slugs.map((slug) => ({ slug }));
   } catch (error) {
     // Сборка не должна зависеть от работающего API: без списка страницы товаров просто
     // не собираются заранее, а рендерятся при первом запросе. Это не подмена данных.

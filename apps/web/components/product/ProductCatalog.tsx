@@ -1,19 +1,23 @@
 import { Container } from "@/components/layout/Container";
 import { CategoryFilter } from "@/components/product/CategoryFilter";
-import { ProductGrid } from "@/components/product/ProductGrid";
+import { CatalogProducts } from "@/components/product/CatalogProducts";
 import { ProductGridSkeleton } from "@/components/product/ProductGridSkeleton";
 import type { Category, CategorySlug } from "@/types/category";
-import type { Product } from "@/types/product";
+import type { ProductsPage } from "@/types/product";
 
 type ProductCatalogProps = {
   /** Фильтры, включая виртуальную «Всё» */
   categories: readonly Category[];
   active: CategorySlug;
-  products: readonly Product[];
+  /** Первая страница выбранной категории */
+  page: ProductsPage;
 };
 
-/** Фильтр категорий и сетка товаров выбранной категории. Данные приходят готовыми. */
-export function ProductCatalog({ categories, active, products }: ProductCatalogProps) {
+/**
+ * Фильтр категорий и сетка товаров выбранной категории. Первая страница приходит готовой с сервера,
+ * следующие подгружает клиентский CatalogProducts.
+ */
+export function ProductCatalog({ categories, active, page }: ProductCatalogProps) {
   return (
     <>
       <Container className="mt-10 md:mt-[100px]">
@@ -21,9 +25,13 @@ export function ProductCatalog({ categories, active, products }: ProductCatalogP
       </Container>
 
       <Container className="mt-10 md:mt-[60px]">
-        {products.length > 0 ? (
-          <ProductGrid
-            products={products}
+        {page.items.length > 0 ? (
+          // key сбрасывает список и курсор при смене категории
+          <CatalogProducts
+            key={active}
+            category={active}
+            initialProducts={page.items}
+            initialCursor={page.nextCursor}
             className="md:mx-auto md:max-w-[630px] lg:max-w-none"
           />
         ) : (

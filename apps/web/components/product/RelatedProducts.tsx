@@ -1,8 +1,7 @@
 import { unstable_rethrow } from "next/navigation";
 import { ProductCarousel } from "@/components/product/ProductCarousel";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { getRelatedCandidates } from "@/lib/catalog";
-import { pickRelatedProducts } from "@/lib/catalog-utils";
+import { getRelatedProducts } from "@/lib/catalog";
 import type { Product } from "@/types/product";
 
 /**
@@ -12,7 +11,7 @@ import type { Product } from "@/types/product";
 export async function RelatedProducts({ product }: { product: Product }) {
   let related;
   try {
-    related = pickRelatedProducts(product, await getRelatedCandidates());
+    related = await getRelatedProducts(product.slug);
   } catch (error) {
     unstable_rethrow(error);
     return null;

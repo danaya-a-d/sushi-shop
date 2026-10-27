@@ -43,8 +43,16 @@ export const apiProductsByIdsSchema = z.object({
 });
 
 export const apiCategoriesSchema = z.array(apiCategorySchema);
+/** Ответ `GET /products/:slug/related`: обычный массив (не больше limit) */
 export const apiProductsSchema = z.array(apiProductSchema);
+
+/** Ответ `GET /products`: страница каталога. nextCursor — непрозрачная строка или null в конце списка. */
+export const apiProductsPageSchema = z.object({
+  items: z.array(apiProductSchema),
+  nextCursor: z.string().min(1).nullable(),
+});
 
 export type ApiCategory = z.infer<typeof apiCategorySchema>;
 export type ApiProduct = z.infer<typeof apiProductSchema>;
+export type ApiProductsPage = z.infer<typeof apiProductsPageSchema>;
 export type ApiProductsByIds = z.infer<typeof apiProductsByIdsSchema>;

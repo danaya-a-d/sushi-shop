@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makeProduct } from "@/test-utils/fixtures";
 import type { Category } from "@/types/category";
-import { parseCategory, pickRelatedProducts, withAllCategory } from "./catalog-utils";
+import { appendUnique, parseCategory, withAllCategory } from "./catalog-utils";
 
 const apiCategories: Category[] = [
   { slug: "hits", label: "Хиты продаж" },
@@ -37,19 +37,27 @@ describe("parseCategory", () => {
   });
 });
 
-describe("pickRelatedProducts", () => {
-  const a = makeProduct("1", { categories: ["rolls", "hits"] });
-  const b = makeProduct("2", { categories: ["soups"] });
-  const c = makeProduct("3", { categories: ["rolls", "hits"] });
-  const d = makeProduct("4", { categories: ["rolls"] });
+describe("appendUnique", () => {
+  const a = makeProduct("1");
+  const b = makeProduct("2");
+  const c = makeProduct("3");
 
-  it("исключает сам товар, сначала идут товары с большим числом общих категорий", () => {
-    expect(pickRelatedProducts(a, [a, b, c, d]).map((p) => p.id)).toEqual(["3", "4", "2"]);
+  it("добавляет новые товары в конец, сохраняя порядок", () => {
+    expect(appendUnique([a, b], [c]).map((p) => p.id)).toEqual(["1", "2", "3"]);
   });
 
-  it("уважает лимит и не меняет исходный список", () => {
-    const candidates = [a, b, c, d];
-    expect(pickRelatedProducts(a, candidates, 1)).toHaveLength(1);
-    expect(candidates.map((p) => p.id)).toEqual(["1", "2", "3", "4"]);
+  it("пропускает товары, чей id уже показан", () => {
+    expect(appendUnique([a, b], [b, c]).map((p) => p.id)).toEqual(["1", "2", "3"]);
+  });
+
+  it("убирает дубли и внутри самой новой страницы", () => {
+    expect(appendUnique([a], [b, b, c]).map((p) => p.id)).toEqual(["1", "2", "3"]);
+  });
+
+  it("не меняет исходные массивы", () => {
+    const current = [a];
+    const result = appendUnique(current, [b]);
+    expect(current).toHaveLength(1);
+    expect(result).not.toBe(current);
   });
 });

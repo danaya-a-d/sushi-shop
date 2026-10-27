@@ -96,6 +96,15 @@ The frontend takes all catalog data from the NestJS API, so the backend and Post
 - `apps/web/.env.example` → `apps/web/.env.local` (`API_URL` for server requests, `NEXT_PUBLIC_API_URL` for
   the browser cart; the public one ends up in the client bundle, so never put secrets in it).
 
+The catalog is paginated (cursor-based, 12 items per page). To check pagination and the "Show more" button on a
+realistic catalog, add 40 demo products (ids and slugs start with `demo-`; the base seed is not changed and the
+command is idempotent), and remove them when they are no longer needed:
+
+```bash
+pnpm --filter api db:seed:demo    # 8 base + 40 demo = 48 products
+pnpm --filter api db:clean:demo   # deletes only `demo-*` products
+```
+
 Run frontend and backend in development mode:
 
 ```bash
