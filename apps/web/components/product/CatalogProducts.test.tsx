@@ -2,6 +2,7 @@
 import "@testing-library/jest-dom/vitest";
 import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { Activity } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CatalogProducts } from "@/components/product/CatalogProducts";
@@ -182,6 +183,79 @@ describe("CatalogProducts: «Показать ещё»", () => {
     await act(async () => pending.reject(new ApiError("aborted", "network")));
 
     expect(fetchPage).toHaveBeenCalledTimes(1);
+  });
+
+  describe("скрытие через Activity (Cache Components)", () => {
+    const withMode = (mode: "visible" | "hidden", fetchPage: FetchProductsPage) => (
+      <CartProvider fetchProducts={createFakeCatalog().fetchProducts}>
+        <Activity mode={mode}>
+          <CatalogProducts category="all" initialProducts={products(1, 12)} initialCursor="c1" fetchPage={fetchPage} />
+        </Activity>
+      </CartProvider>
+    );
+
+    it("запрос отменяется при скрытии, а после показа кнопка снова доступна и работает", async () => {
+      const pending = deferred<ProductsPage>();
+      const fetchPage = vi
+        .fn<FetchProductsPage>()
+        .mockImplementationOnce(() => pending.promise)
+        .mockResolvedValueOnce(pageOf(products(13, 24), null));
+      const { rerender } = render(withMode("visible", fetchPage));
+
+      await userEvent.click(showMore()!);
+      expect(screen.getByRole("button", { name: "Загрузка…" })).toBeDisabled();
+      const { signal } = fetchPage.mock.calls[0][0];
+
+      rerender(withMode("hidden", fetchPage));
+      expect(signal?.aborted).toBe(true);
+      // запоздавший ответ отменённого запроса не должен ни добавить карточки, ни сменить курсор
+      await act(async () => pending.resolve(pageOf(products(13, 24), "stale")));
+
+      rerender(withMode("visible", fetchPage));
+      const button = screen.getByRole("button", { name: "Показать ещё" });
+      expect(button).toBeEnabled();
+      expect(screen.queryByRole("button", { name: "Загрузка…" })).not.toBeInTheDocument();
+      expect(cards()).toHaveLength(12);
+
+      await userEvent.click(button);
+      await waitFor(() => expect(cards()).toHaveLength(24));
+      expect(fetchPage).toHaveBeenCalledTimes(2);
+      expect(fetchPage.mock.calls[1][0]).toMatchObject({ cursor: "c1" });
+      expect(showMore()).not.toBeInTheDocument();
+    });
+
+    it("запрос, отменённый скрытием, не мешает новому: ответ первого игнорируется", async () => {
+      const first = deferred<ProductsPage>();
+      const second = deferred<ProductsPage>();
+      const fetchPage = vi
+        .fn<FetchProductsPage>()
+        .mockImplementationOnce(() => first.promise)
+        .mockImplementationOnce(() => second.promise);
+      const { rerender } = render(withMode("visible", fetchPage));
+
+      await userEvent.click(showMore()!);
+      rerender(withMode("hidden", fetchPage));
+      rerender(withMode("visible", fetchPage));
+      await userEvent.click(showMore()!);
+      expect(fetchPage).toHaveBeenCalledTimes(2);
+
+      // поздний ответ первого запроса приходит, пока идёт второй: кнопка остаётся заблокированной
+      await act(async () => first.resolve(pageOf(products(13, 24), "stale")));
+      expect(screen.getByRole("button", { name: "Загрузка…" })).toBeDisabled();
+      expect(cards()).toHaveLength(12);
+
+      await act(async () => second.resolve(pageOf(products(13, 20), null)));
+      expect(cards()).toHaveLength(20);
+    });
+
+    it("скрытие без запроса в полёте ничего не меняет", async () => {
+      const fetchPage = vi.fn<FetchProductsPage>();
+      const { rerender } = render(withMode("visible", fetchPage));
+      rerender(withMode("hidden", fetchPage));
+      rerender(withMode("visible", fetchPage));
+      expect(showMore()).toBeEnabled();
+      expect(fetchPage).not.toHaveBeenCalled();
+    });
   });
 
   it("озвучивает результат для скринридеров", async () => {

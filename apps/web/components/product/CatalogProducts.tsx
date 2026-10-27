@@ -43,13 +43,25 @@ export function CatalogProducts({
   // Запрос идёт не больше одного: повторное нажатие (двойной клик, Enter) игнорируется
   const loadingRef = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
+  const interruptedRef = useRef(false);
 
-  useEffect(
-    () => () => {
+  // Cache Components прячет ушедшую страницу через <Activity>: компонент не размонтируется, его состояние
+  // живёт, но эффекты очищаются при скрытии и запускаются снова при показе. Скрытие отменяет запрос в
+  // полёте; при показе (и при обычном монтировании, где флага нет) снимаем зависшее «Загрузка…»,
+  // чтобы кнопка не осталась заблокированной. Настоящее размонтирование состояние не трогает.
+  useEffect(() => {
+    if (interruptedRef.current) {
+      interruptedRef.current = false;
+      setStatus("idle");
+    }
+    return () => {
+      if (!loadingRef.current) return;
       abortRef.current?.abort();
-    },
-    [],
-  );
+      abortRef.current = null;
+      loadingRef.current = false;
+      interruptedRef.current = true;
+    };
+  }, []);
 
   const loadMore = useCallback(async () => {
     if (loadingRef.current || cursor === null) return;
@@ -60,7 +72,7 @@ export function CatalogProducts({
     abortRef.current = controller;
     try {
       const page = await fetchPage({ category, cursor, signal: controller.signal });
-      // Размонтирование (смена категории или уход со страницы) отменяет запрос: ответ игнорируется
+      // Скрытие или размонтирование (смена категории, уход со страницы) отменяет запрос: ответ игнорируется
       if (controller.signal.aborted) return;
 
       const next = appendUnique(products, page.items);
@@ -77,7 +89,11 @@ export function CatalogProducts({
       // Уже показанные карточки и курсор остаются, повторная попытка берёт ту же страницу
       setStatus("error");
     } finally {
-      loadingRef.current = false;
+      // Отменённый запрос уже освободил флаг; новый запрос мог начаться после показа страницы
+      if (abortRef.current === controller) {
+        abortRef.current = null;
+        loadingRef.current = false;
+      }
     }
   }, [category, cursor, fetchPage, products]);
 

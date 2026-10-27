@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Container } from "@/components/layout/Container";
 import { ProductDetails } from "@/components/product/ProductDetails";
+import { ProductPageSkeleton } from "@/components/product/ProductPageSkeleton";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { MediaText } from "@/components/shared/MediaText";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -44,16 +45,18 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({
-  params,
-}: PageProps<"/products/[slug]">) {
+/**
+ * Товар читается внутри Suspense: params — данные URL, и чтение на верхнем уровне привязало бы
+ * общую оболочку страницы к одному slug. Здесь только то, что зависит от товара.
+ */
+async function ProductContent({ params }: Pick<PageProps<"/products/[slug]">, "params">) {
   const { slug } = await params;
   if (slug === BUILD_PLACEHOLDER_SLUG) notFound();
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
   return (
-    <main className="pb-20 md:pb-[140px] lg:pb-[160px]">
+    <>
       <Container className="mt-6 md:mt-8 lg:mt-10">
         <Breadcrumbs
           items={[
@@ -73,6 +76,16 @@ export default async function ProductPage({
           <RelatedProducts product={product} />
         </Suspense>
       </Container>
+    </>
+  );
+}
+
+export default function ProductPage({ params }: PageProps<"/products/[slug]">) {
+  return (
+    <main className="pb-20 md:pb-[140px] lg:pb-[160px]">
+      <Suspense fallback={<ProductPageSkeleton />}>
+        <ProductContent params={params} />
+      </Suspense>
 
       <Container as="section" className="mt-10 md:mt-[60px] lg:mt-[80px]">
         <MediaText
