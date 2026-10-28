@@ -15,7 +15,7 @@ describe("createFetchProductsByIds", () => {
   it("один пакетный запрос на все id, ответ приводится к frontend Product", async () => {
     const fetchImpl = vi.fn<typeof fetch>(async () =>
       json({
-        available: [makeApiProduct("1", { priceKopecks: 125000 })],
+        available: [makeApiProduct("1", { priceMinorUnits: 125000 })],
         unavailable: ["2"],
         missing: ["3"],
       }),
@@ -106,7 +106,7 @@ describe("createFetchProductsPage", () => {
   const page = (items: unknown[], nextCursor: string | null) => json({ items, nextCursor });
 
   it("запрашивает следующую страницу с категорией, курсором и размером страницы", async () => {
-    const fetchImpl = vi.fn<typeof fetch>(async () => page([makeApiProduct("13", { priceKopecks: 50000 })], "c2"));
+    const fetchImpl = vi.fn<typeof fetch>(async () => page([makeApiProduct("13", { priceMinorUnits: 50000 })], "c2"));
     const result = await createFetchProductsPage({ baseUrl: "http://api.test", fetchImpl })({
       category: "rolls",
       cursor: "c1",

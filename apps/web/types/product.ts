@@ -20,7 +20,7 @@ export type Product = {
   categories: readonly CategorySlug[];
   /** Вес порции в граммах */
   weight: number;
-  /** Цена в гривнах */
+  /** Цена в тенге (KZT) */
   price: number;
   /** Пока нет данных — блок «Пищевая ценность» не показывается */
   nutrition?: Nutrition;

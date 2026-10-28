@@ -12,7 +12,7 @@ import { CheckoutForm } from "./CheckoutForm";
 
 const SUCCESS_NOTICE = /Форма заполнена корректно/;
 
-// У товаров "1" и "2" в управляемом ответе API цена 1250 грн
+// У товаров "1" и "2" в управляемом ответе API цена 1250 ₸
 const twoItems = [
   { productId: "1", quantity: 1 },
   { productId: "2", quantity: 1 },
@@ -263,13 +263,13 @@ describe("CheckoutForm: итоговая стоимость", () => {
     seedCart(twoItems);
     const user = await renderForm();
 
-    expectTotal(2560);
+    expectTotal(3200);
 
     await user.click(radio(/Самовывоз/));
     expectTotal(2500);
 
     await user.click(radio(/Курьер на дом/));
-    expectTotal(2560);
+    expectTotal(3200);
   });
 
   it("изменение количества пересчитывает итог", async () => {
@@ -277,10 +277,10 @@ describe("CheckoutForm: итоговая стоимость", () => {
     const user = await renderForm();
 
     await user.click(screen.getByRole("button", { name: "Увеличить количество: Запеченный краб" }));
-    expectTotal(3810);
+    expectTotal(4450);
 
     await user.click(screen.getByRole("button", { name: "Уменьшить количество: Радуга" }));
-    expectTotal(2560);
+    expectTotal(3200);
 
     await user.click(radio(/Самовывоз/));
     expectTotal(2500);
@@ -292,7 +292,7 @@ describe("CheckoutForm: итоговая стоимость", () => {
 
     await user.click(screen.getByRole("button", { name: "Удалить из корзины: Радуга" }));
 
-    expectTotal(1310);
+    expectTotal(1950);
   });
 });
 
@@ -332,7 +332,7 @@ describe("CheckoutForm: данные товаров из API", () => {
       }),
     );
     await waitFor(() => expect(submit()).toBeEnabled());
-    expectTotal(2560);
+    expectTotal(3200);
   });
 
   it("недоступный товар остаётся в списке, блокирует оформление и убирается кнопкой удаления", async () => {
@@ -349,7 +349,7 @@ describe("CheckoutForm: данные товаров из API", () => {
 
     await waitFor(() => expect(submit()).toBeEnabled());
     expect(screen.queryByText("Товар временно недоступен")).not.toBeInTheDocument();
-    expectTotal(1310);
+    expectTotal(1950);
   });
 
   it("удалённый из меню товар помечается отдельным текстом", async () => {
@@ -376,7 +376,7 @@ describe("CheckoutForm: данные товаров из API", () => {
 
     await waitFor(() => expect(submit()).toBeEnabled());
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    expectTotal(2560);
+    expectTotal(3200);
   });
 
   it("при открытии checkout перепроверяет актуальную цену", async () => {
@@ -384,7 +384,7 @@ describe("CheckoutForm: данные товаров из API", () => {
     catalog.setProduct(makeProduct("2", { name: "Радуга", price: 1000 }));
     await renderForm();
 
-    expectTotal(2310);
+    expectTotal(2950);
   });
 
   it("не отправляет форму при недоступных позициях даже при корректных данных", async () => {
@@ -432,7 +432,7 @@ describe("CheckoutForm: данные товаров из API", () => {
     expect(submit()).toBeDisabled();
     expect(screen.getByText("Проверяем цены и наличие товаров…")).toBeInTheDocument();
     // последняя известная сумма остаётся на экране
-    expectTotal(2560);
+    expectTotal(3200);
     await user.click(submit());
     expect(screen.queryByText(SUCCESS_NOTICE)).not.toBeInTheDocument();
 
@@ -445,7 +445,7 @@ describe("CheckoutForm: данные товаров из API", () => {
     );
 
     await waitFor(() => expect(submit()).toBeEnabled());
-    expectTotal(2310);
+    expectTotal(2950);
     await user.click(submit());
     expect(await screen.findByText(SUCCESS_NOTICE)).toBeInTheDocument();
   });

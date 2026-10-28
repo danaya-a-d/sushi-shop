@@ -277,9 +277,9 @@ describe("checkoutSchema: оплата", () => {
 });
 
 describe("стоимость доставки", () => {
-  it("самовывоз бесплатный, курьер стоит 60 грн", () => {
+  it("самовывоз бесплатный, курьер стоит 700 ₸", () => {
     expect(getDeliveryFee("pickup")).toBe(0);
-    expect(getDeliveryFee("courier")).toBe(60);
+    expect(getDeliveryFee("courier")).toBe(700);
   });
 
   it("доступны только два способа доставки", () => {

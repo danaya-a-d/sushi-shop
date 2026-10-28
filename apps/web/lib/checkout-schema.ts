@@ -11,7 +11,7 @@ import { z } from "zod";
 
 export const deliveryOptions = [
   { value: "pickup", label: "Самовывоз из ресторана", fee: 0 },
-  { value: "courier", label: "Курьер на дом", fee: 60 },
+  { value: "courier", label: "Курьер на дом", fee: 700 },
 ] as const;
 
 export type DeliveryMethod = (typeof deliveryOptions)[number]["value"];

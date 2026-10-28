@@ -66,7 +66,7 @@ describe('Catalog API (e2e)', () => {
       expect(body.nextCursor).toBeNull();
     });
 
-    it('отдаёт явный контракт: цена в копейках с валютой и без служебных полей', async () => {
+    it('отдаёт явный контракт: цена в минимальных единицах с валютой и без служебных полей', async () => {
       const { body } = await get('/products').expect(200);
 
       expect(Object.keys(body)).toEqual(['items', 'nextCursor']);
@@ -78,8 +78,8 @@ describe('Catalog API (e2e)', () => {
           'окунь, красная рыба, сливочный сыр, омлет, салат айсберг, масаго, сырный соус',
         categories: ['hits', 'rolls'],
         weightGrams: 450,
-        priceKopecks: 125000,
-        currency: 'UAH',
+        priceMinorUnits: 350000,
+        currency: 'KZT',
         nutrition: { calories: 180, protein: 6, fat: 5, carbs: 27 },
         image: { src: '/images/products/roll-01.webp', width: 2670, height: 2750 },
       });
@@ -124,7 +124,7 @@ describe('Catalog API (e2e)', () => {
         id: '2',
         slug: 'rainbow',
         name: 'Радуга',
-        priceKopecks: 125000,
+        priceMinorUnits: 390000,
         categories: ['hits', 'rolls'],
       });
     });

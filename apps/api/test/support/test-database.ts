@@ -73,7 +73,7 @@ export async function prepareTestDatabase(): Promise<void> {
         name: 'Неактивный ролл',
         composition: 'тест',
         weightGrams: 100,
-        priceKopecks: 100,
+        priceMinorUnits: 100,
         imageSrc: '/images/products/inactive.webp',
         imageWidth: 1,
         imageHeight: 1,

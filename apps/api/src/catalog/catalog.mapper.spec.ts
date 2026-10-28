@@ -7,7 +7,7 @@ const row: ProductRow = {
   name: 'Запеченный краб',
   composition: 'состав',
   weightGrams: 450,
-  priceKopecks: 125000,
+  priceMinorUnits: 125000,
   calories: 180,
   protein: 6,
   fat: 5,
@@ -19,10 +19,10 @@ const row: ProductRow = {
 };
 
 describe('toProductResponse', () => {
-  it('сохраняет цену в копейках и добавляет валюту, не переводя в гривны', () => {
+  it('сохраняет цену в минимальных единицах и добавляет валюту, не переводя в тенге', () => {
     const product = toProductResponse(row);
-    expect(product.priceKopecks).toBe(125000);
-    expect(product.currency).toBe('UAH');
+    expect(product.priceMinorUnits).toBe(125000);
+    expect(product.currency).toBe('KZT');
     expect(product).not.toHaveProperty('price');
   });
 
@@ -62,7 +62,7 @@ describe('toProductResponse', () => {
       'image',
       'name',
       'nutrition',
-      'priceKopecks',
+      'priceMinorUnits',
       'slug',
       'weightGrams',
     ]);

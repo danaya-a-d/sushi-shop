@@ -1,4 +1,4 @@
-import { uahToKopecks } from "@/lib/money";
+import { majorToMinorUnits } from "@/lib/money";
 import type { Product } from "@/types/product";
 
 // Чистая логика корзины: без React, localStorage, сети и других браузерных API.
@@ -106,14 +106,14 @@ export function getCartCount(state: CartState): number {
 
 /**
  * Итог по ценам из lookup; товары, которых там нет (не загружены, недоступны), не учитываются.
- * Суммирование в целых копейках, чтобы дробные цены не копили ошибку округления.
+ * Суммирование в целых минимальных единицах (тиынах), чтобы дробные цены не копили ошибку округления.
  */
 export function getCartTotal(state: CartState, lookup: ProductLookup): number {
-  const kopecks = state.items.reduce((sum, item) => {
+  const minorUnits = state.items.reduce((sum, item) => {
     const product = lookup(item.productId);
-    return product ? sum + uahToKopecks(product.price) * item.quantity : sum;
+    return product ? sum + majorToMinorUnits(product.price) * item.quantity : sum;
   }, 0);
-  return kopecks / 100;
+  return minorUnits / 100;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

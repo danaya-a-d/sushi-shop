@@ -16,6 +16,7 @@ import {
   paymentOptions,
 } from "@/lib/checkout-schema";
 import { formatPrice } from "@/lib/format-price";
+import { majorToMinorUnits, minorUnitsToMajor } from "@/lib/money";
 import { RadioOption, TextAreaField, TextField } from "./fields";
 import { checkoutHeading } from "./styles";
 
@@ -118,7 +119,7 @@ export function CheckoutForm({ recommended }: CheckoutFormProps) {
 
   // Итог считается при каждом рендере из актуальной корзины и выбранной доставки,
   // в состоянии он не хранится: при смене доставки пересчитывается сам.
-  const orderTotal = total + getDeliveryFee(delivery);
+  const orderTotal = minorUnitsToMajor(majorToMinorUnits(total) + majorToMinorUnits(getDeliveryFee(delivery)));
 
   // Здесь будет отправка заказа на сервер. Пока backend нет: данные не сохраняются,
   // корзина не очищается, переход на другую страницу не выполняется.

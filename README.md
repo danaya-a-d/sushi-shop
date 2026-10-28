@@ -96,6 +96,10 @@ The frontend takes all catalog data from the NestJS API, so the backend and Post
 - `apps/web/.env.example` → `apps/web/.env.local` (`API_URL` for server requests, `NEXT_PUBLIC_API_URL` for
   the browser cart; the public one ends up in the client bundle, so never put secrets in it).
 
+**Currency.** The shop currency is Kazakhstani tenge (KZT, `₸`). The database and the API store money as integers
+in minor units (1 ₸ = 100 tiyn) in `*MinorUnits` fields; the web app converts to tenge in one place
+(`apps/web/lib/money.ts`). Seed prices are whole tenge.
+
 The catalog is paginated (cursor-based, 12 items per page). To check pagination and the "Show more" button on a
 realistic catalog, add 40 demo products (ids and slugs start with `demo-`; the base seed is not changed and the
 command is idempotent), and remove them when they are no longer needed:
@@ -158,6 +162,16 @@ Never commit real connection strings; they live only in Vercel project settings 
 **Neon.** Use the *pooled* connection string for `DATABASE_URL` (serverless functions open many short-lived
 connections). Run migrations from your machine against the *direct* (non-pooled) string, never as part of the
 deploy: `DATABASE_URL=<direct url> pnpm --filter api db:deploy`. The deploy never runs migrations or seed.
+
+**Updating an existing database to KZT** (local or Neon): apply the migration, then immediately re-run the base seed
+so product prices are rewritten in tenge (the migration only renames columns and does not convert stored numbers; it
+stops if orders in another currency exist). Demo products are optional:
+
+```bash
+pnpm --filter api db:deploy       # migrations
+pnpm --filter api db:seed         # base prices (upsert)
+pnpm --filter api db:seed:demo    # optional, re-run to update demo prices
+```
 
 **After the first deploy** (replace `<domain>` with the deployment URL):
 

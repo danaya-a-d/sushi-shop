@@ -1,9 +1,9 @@
 /**
- * Публичный контракт API каталога. Деньги всегда целые числа в копейках (поле заканчивается на
- * `Kopecks`) с явной валютой; гривны (как в моках фронтенда) получаются делением на 100 на клиенте.
+ * Публичный контракт API каталога. Деньги всегда целые числа в минимальных единицах валюты (поле
+ * заканчивается на `MinorUnits`, для KZT это тиыны) с явной валютой; тенге для интерфейса получаются делением на 100 на клиенте.
  */
 
-export const CATALOG_CURRENCY = 'UAH';
+export const CATALOG_CURRENCY = 'KZT';
 
 export type CategoryResponse = {
   slug: string;
@@ -27,7 +27,7 @@ export type ProductResponse = {
   /** Slug категорий в порядке сортировки категорий */
   categories: string[];
   weightGrams: number;
-  priceKopecks: number;
+  priceMinorUnits: number;
   currency: typeof CATALOG_CURRENCY;
   /** null, пока данных о пищевой ценности нет */
   nutrition: NutritionResponse | null;

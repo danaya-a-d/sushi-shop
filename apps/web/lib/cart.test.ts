@@ -13,8 +13,8 @@ import {
 
 // Корзина не знает, какие товары существуют: цены ей подставляет справочник (lookup), id проверяет формат.
 
-const A = "test-a"; // 100 грн
-const B = "test-b"; // 250 грн
+const A = "test-a"; // 100 ₸
+const B = "test-b"; // 250 ₸
 
 const cart = (...items: [string, number][]): CartState => ({
   items: items.map(([productId, quantity]) => ({ productId, quantity })),

@@ -3,10 +3,10 @@ import { makeApiProduct } from "@/test-utils/fixtures";
 import { toCategory, toProduct, toProductsPage } from "./mappers";
 
 describe("toProduct", () => {
-  it("переводит копейки в гривны в одном месте", () => {
-    expect(toProduct(makeApiProduct("1", { priceKopecks: 125000 })).price).toBe(1250);
-    expect(toProduct(makeApiProduct("1", { priceKopecks: 1250 })).price).toBe(12.5);
-    expect(toProduct(makeApiProduct("1", { priceKopecks: 0 })).price).toBe(0);
+  it("переводит минимальные единицы в основные в одном месте", () => {
+    expect(toProduct(makeApiProduct("1", { priceMinorUnits: 125000 })).price).toBe(1250);
+    expect(toProduct(makeApiProduct("1", { priceMinorUnits: 1250 })).price).toBe(12.5);
+    expect(toProduct(makeApiProduct("1", { priceMinorUnits: 0 })).price).toBe(0);
   });
 
   it("weightGrams → weight", () => {
@@ -50,7 +50,7 @@ describe("toCategory", () => {
 describe("toProductsPage", () => {
   it("переводит товары страницы и сохраняет курсор", () => {
     const page = toProductsPage({
-      items: [makeApiProduct("1", { priceKopecks: 50000 })],
+      items: [makeApiProduct("1", { priceMinorUnits: 50000 })],
       nextCursor: "abc",
     });
     expect(page.items[0].price).toBe(500);

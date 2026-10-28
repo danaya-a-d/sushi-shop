@@ -1,5 +1,5 @@
 // Схема БД интернет-магазина. Деньги хранятся целыми числами в минимальных единицах валюты
-// (копейки гривны: 1250 грн = 125000). CHECK-ограничения Prisma описать не умеет:
+// (тиыны тенге: 4 500 ₸ = 450000). CHECK-ограничения Prisma описать не умеет:
 // они добавлены вручную в SQL первой миграции и перечислены в комментариях моделей.
 
 generator client {
@@ -50,30 +50,30 @@ model Category {
   products  Product[]
 }
 
-/// CHECK: priceKopecks >= 0, weightGrams > 0
+/// CHECK: priceMinorUnits >= 0, weightGrams > 0
 model Product {
   /// Строковые ID совпадают с моковыми товарами фронтенда ("1"…"8")
-  id           String      @id
-  slug         String      @unique
-  name         String
-  composition  String
-  weightGrams  Int
-  priceKopecks Int
+  id              String      @id
+  slug            String      @unique
+  name            String
+  composition     String
+  weightGrams     Int
+  priceMinorUnits Int
   /// Пищевая ценность на 100 г
-  calories     Int?
-  protein      Int?
-  fat          Int?
-  carbs        Int?
-  imageSrc     String
-  imageWidth   Int
-  imageHeight  Int
+  calories        Int?
+  protein         Int?
+  fat             Int?
+  carbs           Int?
+  imageSrc        String
+  imageWidth      Int
+  imageHeight     Int
   /// Неактивные товары скрываются из каталога, но остаются в БД и в старых заказах
-  isActive     Boolean     @default(true)
-  sortOrder    Int         @default(0)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  categories   Category[]
-  orderItems   OrderItem[]
+  isActive        Boolean     @default(true)
+  sortOrder       Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  categories      Category[]
+  orderItems      OrderItem[]
 
   @@index([isActive, sortOrder])
 }
@@ -81,51 +81,51 @@ model Product {
 /// Идентификатор и номер заказа не являются секретом и сами по себе не дают доступа к персональным данным:
 /// публичного просмотра заказа без авторизации нет (будущий API должен проверять отдельное право доступа).
 ///
-/// CHECK: суммы >= 0; totalKopecks = subtotalKopecks + deliveryFeeKopecks;
+/// CHECK: суммы >= 0; totalMinorUnits = subtotalMinorUnits + deliveryFeeMinorUnits;
 /// currency из трёх заглавных букв; при COURIER улица и дом заполнены (не пустые).
 model Order {
-  id                 String         @id @default(uuid(7)) @db.Uuid
+  id                    String         @id @default(uuid(7)) @db.Uuid
   /// Читаемый номер для клиента и оператора
-  number             Int            @unique @default(autoincrement())
-  customerName       String         @db.VarChar(100)
-  customerPhone      String         @db.VarChar(30)
-  deliveryMethod     DeliveryMethod
-  paymentMethod      PaymentMethod
+  number                Int            @unique @default(autoincrement())
+  customerName          String         @db.VarChar(100)
+  customerPhone         String         @db.VarChar(30)
+  deliveryMethod        DeliveryMethod
+  paymentMethod         PaymentMethod
   /// Адрес заполняется только при курьерской доставке
-  street             String?        @db.VarChar(100)
-  house              String?        @db.VarChar(20)
-  apartment          String?        @db.VarChar(20)
-  floor              String?        @db.VarChar(10)
-  intercom           String?        @db.VarChar(20)
-  comment            String?        @db.VarChar(500)
-  status             OrderStatus    @default(NEW)
-  paymentStatus      PaymentStatus  @default(UNPAID)
+  street                String?        @db.VarChar(100)
+  house                 String?        @db.VarChar(20)
+  apartment             String?        @db.VarChar(20)
+  floor                 String?        @db.VarChar(10)
+  intercom              String?        @db.VarChar(20)
+  comment               String?        @db.VarChar(500)
+  status                OrderStatus    @default(NEW)
+  paymentStatus         PaymentStatus  @default(UNPAID)
   /// Валюта фиксируется в заказе, чтобы исторические суммы не зависели от будущих настроек
-  currency           String         @default("UAH") @db.VarChar(3)
-  subtotalKopecks    Int
-  deliveryFeeKopecks Int
-  totalKopecks       Int
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  items              OrderItem[]
+  currency              String         @default("KZT") @db.VarChar(3)
+  subtotalMinorUnits    Int
+  deliveryFeeMinorUnits Int
+  totalMinorUnits       Int
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  items                 OrderItem[]
 
   @@index([createdAt])
   @@index([status])
 }
 
 /// Позиция заказа со снимком данных товара на момент покупки.
-/// CHECK: quantity от 1 до 99, unitPriceKopecks >= 0, productWeightGrams > 0
+/// CHECK: quantity от 1 до 99, unitPriceMinorUnits >= 0, productWeightGrams > 0
 model OrderItem {
-  id                 Int      @id @default(autoincrement())
-  orderId            String   @db.Uuid
-  order              Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  id                  Int      @id @default(autoincrement())
+  orderId             String   @db.Uuid
+  order               Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   /// Становится NULL, если товар удалён из каталога; снимок ниже остаётся
-  productId          String?
-  product            Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-  productName        String
-  productWeightGrams Int
-  unitPriceKopecks   Int
-  quantity           Int
+  productId           String?
+  product             Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName         String
+  productWeightGrams  Int
+  unitPriceMinorUnits Int
+  quantity            Int
 
   @@unique([orderId, productId])
   @@index([productId])

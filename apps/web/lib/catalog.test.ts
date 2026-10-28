@@ -83,9 +83,9 @@ describe("getProductsPage", () => {
     expect(requestedUrl()).toBe("http://api.test/products?category=hits&limit=12&cursor=abc_-1");
   });
 
-  it("возвращает товары и курсор: копейки в гривны, weightGrams в weight", async () => {
+  it("возвращает товары и курсор: тиыны в тенге, weightGrams в weight", async () => {
     fetchMock.mockResolvedValue(
-      json(page([makeApiProduct("1", { priceKopecks: 99900, weightGrams: 300 })], "next")),
+      json(page([makeApiProduct("1", { priceMinorUnits: 99900, weightGrams: 300 })], "next")),
     );
     const result = await getProductsPage();
     expect(result.items[0].price).toBe(999);

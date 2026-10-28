@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-// Контракт ответов NestJS API (apps/api/src/catalog/catalog.types.ts). Деньги — целые копейки.
-// Схемы проверяют ответ в рантайме: неожиданная форма даёт понятную ошибку, а не «undefined грн».
+// Контракт ответов NestJS API (apps/api/src/catalog/catalog.types.ts). Деньги — целые минимальные единицы валюты (для KZT тиыны).
+// Схемы проверяют ответ в рантайме: неожиданная форма даёт понятную ошибку, а не «undefined ₸».
 // Это сырой контракт API; дальше во frontend идут только типы из @/types после mapper-а.
 
 export const apiCategorySchema = z.object({
@@ -23,8 +23,8 @@ export const apiProductSchema = z.object({
   composition: z.string(),
   categories: z.array(z.string()),
   weightGrams: z.number(),
-  priceKopecks: z.number().int().nonnegative(),
-  currency: z.literal("UAH"),
+  priceMinorUnits: z.number().int().nonnegative(),
+  currency: z.literal("KZT"),
   nutrition: apiNutritionSchema.nullable(),
   image: z.object({
     src: z.string(),

@@ -17,7 +17,7 @@ export const productSelect = {
   name: true,
   composition: true,
   weightGrams: true,
-  priceKopecks: true,
+  priceMinorUnits: true,
   calories: true,
   protein: true,
   fat: true,
@@ -54,7 +54,7 @@ export function toProductResponse(row: ProductRow): ProductResponse {
     composition: row.composition,
     categories: row.categories.map((category) => category.slug),
     weightGrams: row.weightGrams,
-    priceKopecks: row.priceKopecks,
+    priceMinorUnits: row.priceMinorUnits,
     currency: CATALOG_CURRENCY,
     nutrition: hasNutrition ? { calories, protein, fat, carbs } : null,
     image: {
