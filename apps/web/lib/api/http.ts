@@ -64,6 +64,15 @@ export async function getJson<T>(
   return parsed.data;
 }
 
+/**
+ * Префикс путей API из переменной окружения (например «/api» на Vercel Services, где публичный путь
+ * не срезается): «/api», «api/» → «/api»; пусто → «».
+ */
+export function normalizePathPrefix(value: string | undefined): string {
+  const prefix = value?.trim().replace(/^\/+|\/+$/g, "");
+  return prefix ? `/${prefix}` : "";
+}
+
 /** Нормализует адрес из переменной окружения: убирает пробелы и завершающие слэши. */
 export function normalizeBaseUrl(value: string | undefined, variable: string): string {
   const url = value?.trim().replace(/\/+$/, "");

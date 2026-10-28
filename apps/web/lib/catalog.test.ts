@@ -38,6 +38,31 @@ const requestedUrl = () => String(fetchMock.mock.calls[0][0]);
 
 const page = (items: unknown[] = [], nextCursor: string | null = null) => ({ items, nextCursor });
 
+describe("API_PREFIX (Vercel Services)", () => {
+  afterEach(() => {
+    delete process.env.API_PREFIX;
+  });
+
+  it("добавляется к адресу API: внутренний URL binding + /api", async () => {
+    process.env.API_URL = "https://internal.test";
+    process.env.API_PREFIX = "/api";
+    fetchMock.mockResolvedValue(json(page()));
+    await getProductsPage();
+    expect(requestedUrl()).toBe("https://internal.test/api/products?limit=12");
+
+    fetchMock.mockClear();
+    fetchMock.mockResolvedValue(json([]));
+    await getRelatedProducts("a");
+    expect(requestedUrl()).toBe("https://internal.test/api/products/a/related?limit=4");
+  });
+
+  it("без API_PREFIX (локально) адрес не меняется", async () => {
+    fetchMock.mockResolvedValue(json(page()));
+    await getProductsPage();
+    expect(requestedUrl()).toBe("http://api.test/products?limit=12");
+  });
+});
+
 describe("getProductsPage", () => {
   it("«Всё» запрашивает /products без параметра category, но с размером страницы", async () => {
     fetchMock.mockResolvedValue(json(page([makeApiProduct("1")])));

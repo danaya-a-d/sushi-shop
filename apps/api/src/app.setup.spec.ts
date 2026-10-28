@@ -1,4 +1,18 @@
-import { parseAllowedOrigins } from './app.setup.js';
+import { parseAllowedOrigins, parseApiPrefix } from './app.setup.js';
+
+describe('parseApiPrefix', () => {
+  it('пусто или не задано — без префикса', () => {
+    expect(parseApiPrefix('')).toBe('');
+    expect(parseApiPrefix('  ')).toBe('');
+    expect(parseApiPrefix(undefined)).toBe('');
+  });
+
+  it('нормализует слэши: /api, api/ и /api/ дают api', () => {
+    expect(parseApiPrefix('/api')).toBe('api');
+    expect(parseApiPrefix('api/')).toBe('api');
+    expect(parseApiPrefix(' /api/ ')).toBe('api');
+  });
+});
 
 describe('parseAllowedOrigins', () => {
   it('разбирает список, убирает пробелы и завершающие слэши', () => {

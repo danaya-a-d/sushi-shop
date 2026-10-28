@@ -32,3 +32,6 @@ next-env.d.ts
 
 # Prisma Client (генерируется командой prisma generate)
 apps/api/src/generated/
+
+# Vercel
+.vercel/

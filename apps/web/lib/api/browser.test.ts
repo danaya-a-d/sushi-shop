@@ -92,6 +92,16 @@ describe("createFetchProductsByIds", () => {
   });
 });
 
+describe("относительный адрес API (тот же origin, Vercel)", () => {
+  it("NEXT_PUBLIC_API_URL=/api: запросы идут на /api/... без абсолютного адреса", async () => {
+    const fetchImpl = vi.fn<typeof fetch>(async () =>
+      json({ items: [], nextCursor: null }),
+    );
+    await createFetchProductsPage({ baseUrl: "/api", fetchImpl })({ category: "rolls" });
+    expect(String(fetchImpl.mock.calls[0][0])).toBe("/api/products?category=rolls&limit=12");
+  });
+});
+
 describe("createFetchProductsPage", () => {
   const page = (items: unknown[], nextCursor: string | null) => json({ items, nextCursor });
 

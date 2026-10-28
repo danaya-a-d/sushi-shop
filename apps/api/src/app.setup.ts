@@ -9,11 +9,26 @@ export function parseAllowedOrigins(value = process.env.WEB_ORIGINS): string[] {
 }
 
 /**
- * Настройка приложения, общая для main.ts и e2e-тестов. CORS нужен браузерной корзине
- * (frontend на другом origin): разрешены только перечисленные origin и только чтение.
+ * Глобальный префикс маршрутов из API_PREFIX («/api» или «api»). Пусто — маршруты без префикса
+ * (локальная разработка). Vercel Services не срезает префикс публичного пути, поэтому там API_PREFIX=/api.
+ */
+export function parseApiPrefix(value = process.env.API_PREFIX): string {
+  return (value ?? '').trim().replace(/^\/+|\/+$/g, '');
+}
+
+/**
+ * Настройка приложения, общая для main.ts и e2e-тестов. CORS нужен браузерной корзине,
+ * если frontend на другом origin (локальная разработка): разрешены только перечисленные origin
+ * и только чтение. На Vercel сайт и API на одном origin, WEB_ORIGINS там не нужен.
  * Серверные запросы Next.js CORS не используют.
  */
-export function configureApp(app: INestApplication): void {
+export function configureApp(
+  app: INestApplication,
+  { apiPrefix = parseApiPrefix() }: { apiPrefix?: string } = {},
+): void {
+  if (apiPrefix) {
+    app.setGlobalPrefix(apiPrefix);
+  }
   const origins = parseAllowedOrigins();
   if (origins.length > 0) {
     app.enableCors({ origin: origins, methods: ['GET', 'HEAD'] });
