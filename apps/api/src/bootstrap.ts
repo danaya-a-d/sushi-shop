@@ -7,7 +7,6 @@ import { describeDatabaseUrl, withTimeout, type BootLog } from './diagnostics/bo
 /** Ограничения диагностических этапов: запуск должен упасть с ошибкой, а не зависнуть молча. */
 const CREATE_TIMEOUT_MS = 15_000;
 const INIT_TIMEOUT_MS = 25_000;
-const LISTEN_TIMEOUT_MS = 10_000;
 
 export async function bootstrap(log: BootLog): Promise<void> {
   loadRootEnv();
@@ -32,7 +31,8 @@ export async function bootstrap(log: BootLog): Promise<void> {
     log('init:done');
 
     log('listen:start');
-    await withTimeout(app.listen(process.env.PORT ?? 3001), LISTEN_TIMEOUT_MS, 'app.listen');
+    // Без таймаута: в Vercel Services промис listen() не завершается, это ожидаемо (см. main.ts)
+    await app.listen(process.env.PORT ?? 3001);
     log('listen:done');
   } catch (error) {
     // Не оставляем открытых соединений с БД, если запуск не удался
