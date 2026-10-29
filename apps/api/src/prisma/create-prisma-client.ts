@@ -11,5 +11,7 @@ export function createPrismaClient(
   if (!connectionString) {
     throw new Error('DATABASE_URL не задан: скопируйте .env.example в .env');
   }
-  return new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
+  // connectionTimeoutMillis: без ответа от БД соединение завершается ошибкой, а не висит до таймаута функции
+  const adapter = new PrismaPg({ connectionString, connectionTimeoutMillis: 10_000 });
+  return new PrismaClient({ adapter });
 }

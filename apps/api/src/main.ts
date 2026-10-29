@@ -1,14 +1,31 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module.js';
-import { configureApp } from './app.setup.js';
-import { loadRootEnv } from './config/load-env.js';
+import { createBootLog, describeError } from './diagnostics/boot-log.js';
 
-async function bootstrap() {
-  loadRootEnv();
-  const app = await NestFactory.create(AppModule);
-  configureApp(app);
-  // SIGTERM/SIGINT запускают onModuleDestroy: PrismaService закрывает соединения с БД
-  app.enableShutdownHooks();
-  await app.listen(process.env.PORT ?? 3001);
+// Диагностический запуск (временный): статические импорты выполнились бы до первого лога, поэтому
+// приложение подгружается динамически. Так видно, на каком этапе остановился запуск:
+//  - нет даже `entry-loaded`: этот файл не выполнялся (упаковка функции);
+//  - `module-load-failed`: не загрузились модули приложения (зависимости, пути ESM);
+//  - дальше этапы create/init/listen: приложение загрузилось, остановка на конкретном этапе.
+const log = createBootLog();
+log('entry-loaded', { node: process.version, url: import.meta.url, cwd: process.cwd() });
+
+process.on('unhandledRejection', (reason) => log('unhandledRejection', describeError(reason)));
+process.on('uncaughtException', (error) => {
+  log('uncaughtException', describeError(error));
+  process.exit(1);
+});
+
+let bootstrap: (log: ReturnType<typeof createBootLog>) => Promise<void>;
+try {
+  ({ bootstrap } = await import('./bootstrap.js'));
+  log('modules-loaded');
+} catch (error) {
+  log('module-load-failed', describeError(error));
+  throw error;
 }
-await bootstrap();
+
+try {
+  await bootstrap(log);
+} catch (error) {
+  log('bootstrap-failed', describeError(error));
+  throw error;
+}
