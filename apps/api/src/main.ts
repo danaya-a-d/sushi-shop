@@ -11,4 +11,10 @@ async function bootstrap() {
   app.enableShutdownHooks();
   await app.listen(process.env.PORT ?? 3001);
 }
-await bootstrap();
+
+// Без top-level await: в Vercel Services промис app.listen() не завершается, и `await bootstrap()` на
+// верхнем уровне блокировал бы загрузку модуля, так что функция не начинала бы принимать запросы.
+bootstrap().catch((error: unknown) => {
+  console.error(error);
+  process.exit(1);
+});
