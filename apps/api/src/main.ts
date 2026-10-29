@@ -1,35 +1,20 @@
-import { createBootLog, describeError } from './diagnostics/boot-log.js';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module.js';
+import { configureApp } from './app.setup.js';
+import { loadRootEnv } from './config/load-env.js';
 
-// Диагностический запуск (временный): статические импорты выполнились бы до первого лога, поэтому
-// приложение подгружается динамически. Так видно, на каком этапе остановился запуск:
-//  - нет даже `entry-loaded`: этот файл не выполнялся (упаковка функции);
-//  - `module-load-failed`: не загрузились модули приложения (зависимости, пути ESM);
-//  - дальше этапы create/init/listen: приложение загрузилось, остановка на конкретном этапе.
-//
-// Важно: на верхнем уровне нет `await`. Vercel Services подменяет запуск HTTP-сервера, и промис
-// `app.listen()` там не завершается: `await bootstrap()` на верхнем уровне блокировал бы загрузку
-// модуля, и функция так и не начинала принимать запросы (см. документацию Vercel для NestJS).
-const log = createBootLog();
-log('entry-loaded', { node: process.version, url: import.meta.url, cwd: process.cwd() });
+async function bootstrap() {
+  loadRootEnv();
+  const app = await NestFactory.create(AppModule);
+  configureApp(app);
+  // SIGTERM/SIGINT запускают onModuleDestroy: PrismaService закрывает соединения с БД
+  app.enableShutdownHooks();
+  await app.listen(process.env.PORT ?? 3001);
+}
 
-process.on('unhandledRejection', (reason) => log('unhandledRejection', describeError(reason)));
-process.on('uncaughtException', (error) => {
-  log('uncaughtException', describeError(error));
+// Без top-level await: в Vercel Services промис app.listen() не завершается, и `await bootstrap()` на
+// верхнем уровне блокировал бы загрузку модуля, так что функция не начинала бы принимать запросы.
+bootstrap().catch((error: unknown) => {
+  console.error(error);
   process.exit(1);
 });
-
-import('./bootstrap.js')
-  .then(
-    (module) => {
-      log('modules-loaded');
-      return module.bootstrap(log);
-    },
-    (error: unknown) => {
-      log('module-load-failed', describeError(error));
-      throw error;
-    },
-  )
-  .catch((error: unknown) => {
-    log('bootstrap-failed', describeError(error));
-    process.exitCode = 1;
-  });
