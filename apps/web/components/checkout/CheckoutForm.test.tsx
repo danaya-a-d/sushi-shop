@@ -10,7 +10,7 @@ import type { ProductsByIds } from "@/lib/api/browser";
 import { createFakeCatalog, deferred, makeProduct } from "@/test-utils/fixtures";
 import { CheckoutForm } from "./CheckoutForm";
 
-const SUCCESS_NOTICE = /Форма заполнена корректно/;
+const SUCCESS_NOTICE = /Данные заполнены корректно/;
 
 // У товаров "1" и "2" в управляемом ответе API цена 1250 ₸
 const twoItems = [
